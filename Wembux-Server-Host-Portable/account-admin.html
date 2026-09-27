@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="./wembux.ico" sizes="any" type="image/x-icon" />
+  <title>Wembux Status</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101311;
+      --panel: #171b18;
+      --panel2: #1d231f;
+      --line: #2a312c;
+      --text: #edf2ec;
+      --muted: #8c978d;
+      --lime: #c6f36a;
+      --red: #ff7a7a;
+      --cyan: #78d9d0;
+      --shadow: rgba(0,0,0,.35);
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --sans: "Segoe UI", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1e2a22 0%, var(--bg) 45%);
+      color: var(--text);
+      font-family: var(--sans);
+    }
+    .shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--lime);
+      display: grid;
+      place-items: center;
+      color: #0d110d;
+      box-shadow: 0 0 28px rgba(198, 243, 106, .25);
+      font-weight: 900;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .btn.primary {
+      background: rgba(198,243,106,.08);
+      border-color: rgba(198,243,106,.4);
+      color: var(--lime);
+    }
+    .btn.danger {
+      background: rgba(255,122,122,.08);
+      border-color: rgba(255,122,122,.4);
+      color: var(--red);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 18px;
+    }
+    .panel {
+      background: rgba(23,27,24,.95);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 16px 35px var(--shadow);
+    }
+    .panel-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .card { padding: 18px; }
+    .notice {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(198,243,106,.25);
+      border-radius: 10px;
+      background: rgba(198,243,106,.06);
+      color: #dfead0;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .app-health {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px 14px;
+      border: 1px solid rgba(198,243,106,.28);
+      border-radius: 10px;
+      background: rgba(198,243,106,.06);
+    }
+    .app-health[data-state="error"] { border-color: rgba(255,122,122,.4); background: rgba(255,122,122,.06); }
+    .health-indicator { width: 9px; height: 9px; flex: none; border-radius: 50%; background: var(--lime); box-shadow: 0 0 12px rgba(198,243,106,.55); }
+    .app-health[data-state="error"] .health-indicator { background: var(--red); box-shadow: 0 0 12px rgba(255,122,122,.45); }
+    .app-health-copy { min-width: 0; flex: 1; }
+    .app-health-copy strong, .app-health-copy small { display: block; }
+    .app-health-copy strong { color: var(--lime); font: 10px var(--mono); }
+    .app-health[data-state="error"] .app-health-copy strong { color: var(--red); }
+    .app-health-copy small, .app-health time { margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; }
+    .app-health time { flex: none; font: 9px var(--mono); }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .stat {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .stat strong {
+      font-size: 22px;
+      display: block;
+      margin-top: 8px;
+      color: var(--lime);
+    }
+    .stat span {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      padding: 11px 12px;
+      font-size: 12px;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-size: 10px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 7px;
+      border-radius: 999px;
+      font-size: 10px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .pill.admin { background: rgba(120,217,208,.08); color: var(--cyan); border-color: rgba(120,217,208,.4); }
+    .pill.banned { background: rgba(255,122,122,.08); color: var(--red); border-color: rgba(255,122,122,.4); }
+    .pill.active { background: rgba(198,243,106,.08); color: var(--lime); border-color: rgba(198,243,106,.4); }
+    .muted { color: var(--muted); }
+    .empty {
+      padding: 22px 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tr { border-bottom: 1px solid var(--line); padding: 8px 0; }
+      td { border: 0; padding: 6px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-mark">W</div>
+        <div>Wembux Status</div>
+      </div>
+      <div class="toolbar">
+        <button class="btn primary" id="refresh-btn">Refresh</button>
+        <button class="btn" id="logout-btn">Log out</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Account moderation</div>
+        </div>
+        <div class="card">
+          <div class="app-health" id="app-health" data-state="loading" role="status" aria-live="polite"><span class="health-indicator"></span><div class="app-health-copy"><strong id="app-health-label">CHECKING</strong><small id="app-health-detail">Reading this browser's account store...</small></div><time id="app-health-checked"></time></div>
+          <div class="notice">
+            Server status and account moderation. The hosting laptop must stay on for friends to connect.
+          </div>
+          <div class="stats">
+            <div class="stat"><span>Accounts</span><strong id="stat-total">1</strong></div>
+            <div class="stat"><span>Active</span><strong id="stat-active">1</strong></div>
+            <div class="stat"><span>Banned</span><strong id="stat-banned">0</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Accounts</div>
+        </div>
+        <div id="accounts-table-wrap"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="./wembux-users.js"></script>
+  <script>
+    (async function () {
+      const refreshBtn = document.getElementById('refresh-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+      const wrap = document.getElementById('accounts-table-wrap');
+      const escapeHtml = value => String(value || '').replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[character]);
+
+      async function renderAccounts() {
+        const health = document.getElementById('app-health');
+        try {
+        const [accounts, serverStatus] = await Promise.all([
+          window.WembuxAccounts.getAccounts(),
+          window.WembuxAccounts.apiRequest('/health')
+        ]);
+        const serverReady = serverStatus.status === 'ok' && serverStatus.database === 'ok';
+        health.dataset.state = serverReady ? 'ok' : 'error';
+        document.getElementById('app-health-label').textContent = serverReady ? 'SERVER ONLINE' : 'SERVER UNAVAILABLE';
+        document.getElementById('app-health-detail').textContent = serverReady ? `Database ready · ${serverStatus.accounts} accounts · ${serverStatus.onlineUsers || 0} online now` : 'The server or database is not responding.';
+        document.getElementById('app-health-checked').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+        const activeCount = accounts.filter(account => !account.banned).length;
+        const bannedCount = accounts.length - activeCount;
+        document.getElementById('stat-total').textContent = accounts.length;
+        document.getElementById('stat-active').textContent = activeCount;
+        document.getElementById('stat-banned').textContent = bannedCount;
+
+        wrap.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Account</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Reason</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>${accounts.map(account => {
+              const owner = account.role === 'owner';
+              const roleBadge = `<span class="pill ${owner ? 'admin' : ''}">${escapeHtml(account.role)}</span>`;
+              const statusBadge = account.banned ? '<span class="pill banned">banned</span>' : '<span class="pill active">active</span>';
+              const reason = account.reason ? escapeHtml(account.reason) : '<span class="muted">—</span>';
+              const action = owner ? '<span class="muted">Protected</span>' : `<button class="btn" type="button" data-account-action="${account.banned ? 'unban' : 'ban'}" data-account-id="${escapeHtml(account.id)}">${account.banned ? 'Unban' : 'Ban'}</button>`;
+              return `<tr><td><strong>${escapeHtml(account.username)}</strong><div class="muted">${escapeHtml(account.email)}</div></td><td>${roleBadge}</td><td>${statusBadge}</td><td>${reason}</td><td>${action}</td></tr>`;
+            }).join('')}</tbody>
+          </table>
+        `;
+        } catch (error) {
+          health.dataset.state = 'error';
+          document.getElementById('app-health-label').textContent = 'SERVER UNAVAILABLE';
+          document.getElementById('app-health-detail').textContent = error.message || 'Could not reach the Wembux server.';
+          document.getElementById('app-health-checked').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+          wrap.innerHTML = '<div class="empty">Could not load accounts from the server.</div>';
+        }
+      }
+
+      refreshBtn.addEventListener('click', () => renderAccounts());
+      wrap.addEventListener('click', async function (event) {
+        const button = event.target.closest('[data-account-action]');
+        if (!button) return;
+        const accountId = button.dataset.accountId;
+        if (button.dataset.accountAction === 'ban') {
+          const reason = window.prompt('Reason for banning this account:');
+          if (reason === null) return;
+          await window.WembuxAccounts.banAccount(accountId, reason);
+        } else {
+          await window.WembuxAccounts.unbanAccount(accountId);
+        }
+        await renderAccounts();
+      });
+      logoutBtn.addEventListener('click', async function () {
+        await window.WembuxAccounts.clearSession();
+        window.location.href = './login.html';
+      });
+
+      const session = await window.WembuxAccounts.ready;
+      if (!session || session.role !== 'owner') {
+        window.location.href = './login.html';
+        return;
+      }
+      await renderAccounts();
+    })();
+  </script>
+</body>
+</html>

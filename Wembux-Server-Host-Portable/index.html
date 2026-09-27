@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111513">
+  <meta name="wembux-build" content="__WEMBUX_BUILD_ID__">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./wembux.ico" sizes="any" type="image/x-icon">
+  <title>Wembux · PC Control</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+    :root{color-scheme:dark;--bg:#101311;--panel:#171b18;--panel2:#1d231f;--line:#2a312c;--text:#edf2ec;--muted:#8c978d;--lime:#c6f36a;--cyan:#78d9d0;--orange:#ffb86a;--red:#ff7777;--mono:'DM Mono',monospace;--sans:'Manrope',sans-serif}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 56% -28%,#29372e 0,transparent 43%),var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--lime);outline-offset:3px}.app{min-height:100vh;display:grid;grid-template-columns:236px minmax(0,1fr)}
+    aside{border-right:1px solid var(--line);padding:25px 15px;display:flex;flex-direction:column;min-height:100vh;background:#121613e8}.brand{display:flex;gap:11px;align-items:center;padding:0 10px 30px}.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--lime);display:grid;place-items:center;color:#101510;box-shadow:0 0 24px #c6f34235}.brand-mark svg{width:21px}.brand-name{font-size:15px;font-weight:800;letter-spacing:.2px}.brand-sub{color:var(--muted);font:10px var(--mono);margin-top:2px}.nav-label{padding:8px 11px;color:#657067;text-transform:uppercase;font:10px var(--mono);letter-spacing:1.2px}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#9ba59c;text-align:left;padding:11px 12px;border-radius:7px;display:flex;align-items:center;gap:12px;font-size:12px;font-weight:600;transition:.16s}.nav button:hover{background:#ffffff08;color:var(--text)}.nav button.active{background:#c6f36a12;color:var(--lime);box-shadow:inset 2px 0 var(--lime)}.nav svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7}.side-spacer{flex:1}.device-card{padding:13px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(140deg,#1c241e,#151a17)}.device-head{display:flex;align-items:center;gap:9px;margin-bottom:10px}.device-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime)}.device-head span{font:10px var(--mono);color:#bdc8bc}.device-name{font-size:12px;font-weight:700}.device-caption{font-size:10px;color:var(--muted);margin-top:3px}.device-foot{border-top:1px solid var(--line);padding-top:9px;margin-top:12px;display:flex;justify-content:space-between;color:var(--muted);font:9px var(--mono)}
+    main{padding:27px clamp(22px,4vw,60px) 50px;max-width:1500px;width:100%;margin:auto}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:27px}.crumb{font:10px var(--mono);color:var(--muted)}.crumb b{color:#dbe3d8;font-weight:400}.top-actions{display:flex;align-items:center;gap:9px}.icon-button{width:34px;height:34px;background:#171c19;border:1px solid var(--line);border-radius:7px;display:grid;place-items:center;color:#aab4a9}.icon-button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7}.avatar{width:31px;height:31px;border-radius:7px;background:#28342c;color:var(--lime);display:grid;place-items:center;font:11px var(--mono);margin-left:4px}.page{display:none;animation:arrive .25s ease}.page.active{display:block}@keyframes arrive{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}.eyebrow{color:var(--lime);font:10px var(--mono);letter-spacing:1.5px;text-transform:uppercase}.page-title{font-size:25px;line-height:1.2;letter-spacing:0;margin:8px 0 6px;font-weight:700}.page-desc{color:var(--muted);font-size:12px;margin:0}.heading-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:21px}.stamp{font:10px var(--mono);color:var(--muted);border:1px solid var(--line);padding:8px 10px;border-radius:5px}
+    .notice{display:flex;align-items:center;gap:11px;background:#171d18;border:1px solid #303b31;border-radius:6px;padding:11px 13px;color:#abb8aa;font-size:10px;line-height:1.5;margin:17px 0 20px}.notice strong{color:#e0e8dc;font-weight:600}.notice-mark{color:var(--lime);font:14px var(--mono)}
+    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.metric{background:linear-gradient(135deg,#1a201c,#161a17);border:1px solid var(--line);border-radius:7px;padding:14px 15px;min-width:0}.metric-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:10px}.metric-icon{color:var(--cyan);font:13px var(--mono)}.metric-value{font-size:24px;font-weight:600;margin:12px 0 6px;letter-spacing:0}.metric-unit{font:11px var(--mono);color:var(--muted)}.metric-bottom{display:flex;align-items:center;gap:7px;color:#9ba69b;font:9px var(--mono)}.meter{height:3px;background:#303832;border-radius:4px;overflow:hidden;margin:9px 0 8px}.meter span{display:block;height:100%;background:var(--lime);border-radius:4px}.metric:nth-child(2) .meter span{background:var(--cyan)}.metric:nth-child(3) .meter span{background:var(--orange)}
+    .content-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(245px,.9fr);gap:13px;margin-top:14px}.panel{background:#171b18;border:1px solid var(--line);border-radius:7px;padding:17px}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.panel-title{font-size:12px;font-weight:700}.panel-meta{font:9px var(--mono);color:var(--muted)}.chart{height:160px;width:100%;display:block;overflow:visible}.chart-labels{display:flex;justify-content:space-between;color:#707b70;font:9px var(--mono);margin-top:3px}.legend{display:flex;gap:14px;font:9px var(--mono);color:var(--muted)}.legend i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lime);margin-right:5px}.legend span+span i{background:var(--cyan)}.health-layout{display:grid;grid-template-columns:98px 1fr;align-items:center;gap:16px;margin:18px 0 14px}.health-ring{width:94px;height:94px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--lime) 0 82%,#303932 82% 100%);position:relative}.health-ring:before{content:'';position:absolute;inset:6px;background:#171b18;border-radius:50%}.health-ring b{z-index:1;font-size:20px}.health-ring small{font:8px var(--mono);color:var(--muted);display:block;text-align:center;margin-top:-17px}.health-copy strong{font-size:12px}.health-copy p{font-size:10px;color:var(--muted);line-height:1.55;margin:6px 0 0}.health-list{display:grid;gap:9px;border-top:1px solid var(--line);padding-top:13px}.health-item{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#abb5aa}.health-item b{font:9px var(--mono);font-weight:400;color:var(--lime)}
+    .lower-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr);gap:13px;margin-top:13px}.profile-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.profile{background:#141815;border:1px solid var(--line);border-radius:6px;padding:11px 10px;text-align:left;transition:.16s}.profile:hover{border-color:#64744c}.profile.selected{border-color:var(--lime);background:#c6f36a0c}.profile strong{font-size:10px;display:block;margin-bottom:5px}.profile span{font-size:9px;line-height:1.45;color:var(--muted);display:block}.profile .profile-mark{float:right;color:var(--lime);font-size:12px;opacity:0}.profile.selected .profile-mark{opacity:1}.inline-link{background:none;border:0;color:var(--lime);font:9px var(--mono);padding:4px}.action-list{display:grid;gap:0}.action-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line)}.action-row:first-child{border-top:0;padding-top:1px}.action-copy strong{display:block;font-size:10px;font-weight:600}.action-copy span{font-size:9px;color:var(--muted);display:block;margin-top:3px}.action-btn{background:transparent;border:1px solid #3b483d;border-radius:4px;color:#c7d1c5;padding:6px 9px;font:9px var(--mono)}.action-btn:hover{border-color:var(--lime);color:var(--lime)}
+    .section-panel{margin-top:15px}.setting-row{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding:13px 0;gap:15px}.setting-row:first-of-type{border-top:0}.setting-copy strong{font-size:11px;display:block}.setting-copy p{font-size:10px;color:var(--muted);margin:4px 0 0;line-height:1.5}.switch{width:36px;height:20px;flex:none;border:0;border-radius:20px;background:#384039;padding:3px;transition:.2s}.switch:after{content:'';display:block;width:14px;height:14px;border-radius:50%;background:#a8b1a6;transition:.2s}.switch.on{background:#7da83e}.switch.on:after{transform:translateX(16px);background:#f4ffdf}.row-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.storage-line{margin:15px 0}.storage-line-head{display:flex;justify-content:space-between;font-size:10px;margin-bottom:7px}.storage-line-head span+span{font:9px var(--mono);color:var(--muted)}.storage-bar{height:7px;background:#2b322d;border-radius:5px;overflow:hidden}.storage-bar i{display:block;height:100%;background:var(--cyan);border-radius:5px}.bios-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.bios-item{border:1px solid var(--line);border-radius:6px;background:#151a16;padding:13px}.bios-item-top{display:flex;justify-content:space-between;align-items:center}.bios-item h3{font-size:11px;margin:0}.bios-tag{color:var(--lime);font:8px var(--mono);text-transform:uppercase}.bios-item p{font-size:10px;line-height:1.55;color:var(--muted);margin:8px 0 0}.safe-note{border-left:2px solid var(--orange);padding:10px 12px;background:#ffb86a0b;color:#b9b2a3;font-size:10px;line-height:1.6;margin-top:14px}.safe-note strong{color:#f5c58d}
+    .driver-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:14px}.driver-card{background:#171b18;border:1px solid var(--line);border-radius:7px;padding:15px;display:flex;flex-direction:column;min-height:156px}.driver-card-head{display:flex;justify-content:space-between;align-items:flex-start}.driver-card h2{font-size:13px;margin:0}.driver-card p{font-size:10px;color:var(--muted);line-height:1.55;margin:8px 0 14px}.driver-card .panel-meta{margin-top:4px}.driver-card .action-btn{align-self:flex-start;margin-top:auto;text-decoration:none}.os-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.os-shortcut{display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;color:#d7e0d4;background:#141815;border:1px solid var(--line);padding:11px;border-radius:5px;font-size:10px}.os-shortcut:hover{border-color:var(--lime);color:var(--lime)}.os-shortcut span{color:var(--muted);font:9px var(--mono)}
+    .opt-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:13px;margin-top:14px}.checklist{display:grid;gap:0}.check-row{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-top:1px solid var(--line)}.check-row:first-child{border-top:0}.check-row input{accent-color:var(--lime);width:15px;height:15px;flex:none;margin:1px 0 0}.check-copy strong{font-size:10px;display:block}.check-copy span{font-size:9px;color:var(--muted);line-height:1.5;display:block;margin-top:4px}.select-control{background:#111613;border:1px solid #39443a;color:var(--text);border-radius:4px;padding:8px;font:10px var(--mono)}.check-progress{height:4px;background:#303832;border-radius:4px;overflow:hidden;margin:12px 0 5px}.check-progress span{display:block;height:100%;width:0;background:var(--lime);transition:width .2s}.risk-label{font:8px var(--mono);color:var(--orange);text-transform:uppercase}.quick-action{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;margin:3px 5px 3px 0}.check-note{font-size:9px;color:var(--muted);line-height:1.6;margin-top:10px}
+    .encrypted-layout{display:grid;grid-template-columns:92px 240px minmax(0,1fr);min-height:560px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#121716}.server-bar{background:#111613;padding:14px 10px;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:12px}.server-pill{width:52px;height:52px;border-radius:16px;background:linear-gradient(160deg,#c6f36a,#8ac5b1);color:#0d120f;font-weight:800;display:grid;place-items:center;border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 24px rgba(198,243,106,.15)}.server-pill.alt{background:linear-gradient(160deg,#78d9d0,#4e7ad8)}.server-pill.neutral{background:linear-gradient(160deg,#2d3935,#171d1b);color:var(--text)}.server-pill.active{outline:2px solid rgba(198,243,106,.5);outline-offset:2px}.channel-pane{background:#171d1a;border-right:1px solid var(--line);padding:18px 14px}.channel-header{font-size:13px;font-weight:700;margin-bottom:18px}.channel-label{font:9px var(--mono);letter-spacing:1.4px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}.channel-list{display:grid;gap:7px}.channel-item{background:transparent;border:1px solid transparent;border-radius:8px;padding:8px 10px;text-align:left;color:#bdc9be;font-size:11px;display:flex;align-items:center;justify-content:space-between}.channel-item.active{background:rgba(198,243,106,.08);border-color:rgba(198,243,106,.22);color:var(--text)}.mini-panel{margin-top:18px;padding:12px;background:#111613;border:1px solid var(--line);border-radius:10px}.mini-title{font:9px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:1.1px}.security-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.security-pill{padding:5px 7px;border-radius:999px;background:#162119;border:1px solid rgba(120,217,208,.35);color:#b0f1de;font:8px var(--mono);letter-spacing:.8px}.chat-pane{display:flex;flex-direction:column;background:#101513}.chat-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);background:rgba(18,22,20,.8)}.chat-header strong{display:block;font-size:14px}.chat-header span{font-size:10px;color:var(--muted)}.chat-actions{display:flex;gap:8px;align-items:center}.mini-lock,.mini-nitro{border-radius:999px;border:1px solid var(--line);background:#171d1a;color:#dfe9df;padding:7px 10px;font:8px var(--mono);letter-spacing:1px;text-transform:uppercase}.mini-lock{border-color:rgba(120,217,208,.4);color:#9fe9dc}.mini-nitro{background:#1a1b19;color:#b2b9b1}.mini-nitro[disabled]{opacity:.55;cursor:not-allowed}.chat-feed{flex:1;padding:18px 20px;display:flex;flex-direction:column;gap:14px;overflow:auto;background:linear-gradient(180deg,#101513,#0e120f)}.message{display:flex;gap:10px}.message-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(160deg,#c6f36a,#78d9d0);color:#131812;font:10px var(--mono);display:grid;place-items:center;font-weight:800}.message.self .message-avatar{background:linear-gradient(160deg,#e0ffe0,#7ec8d4);color:#101b18}.message-bubble{background:#171d1a;border:1px solid var(--line);border-radius:12px;padding:10px 12px;max-width:72%}.message-head{display:flex;align-items:center;gap:8px;margin-bottom:5px}.message-head strong{font-size:11px}.message-head span{font:8px var(--mono);color:var(--muted)}.message-bubble p{margin:0;color:#dfe9df;line-height:1.55;font-size:11px}.message.self .message-bubble{background:rgba(198,243,106,.08);border-color:rgba(198,243,106,.18)}.composer{display:flex;gap:10px;padding:14px 18px 18px;border-top:1px solid var(--line);background:#121715}.composer input{flex:1;background:#161d1a;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font:inherit;color:var(--text)}.composer button,.create-server-btn{background:linear-gradient(160deg,#dfff85,#bce963);color:#111912;border:0;border-radius:10px;padding:11px 16px;font:10px var(--mono);font-weight:800;letter-spacing:1px}.server-create{display:flex;gap:8px;padding:0 18px 18px;background:#121715}.server-create input{flex:1;background:#161d1a;border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text)}.server-create button{padding:10px 12px}.encrypted-status{font:9px var(--mono);color:#aae7da;letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--line);padding:10px 18px 0;background:#121715}.toast{position:fixed;right:22px;bottom:22px;background:#242d25;border:1px solid #485544;color:#e5eddf;padding:12px 15px;border-radius:6px;box-shadow:0 8px 28px #0007;font-size:11px;opacity:0;transform:translateY(8px);transition:.22s;pointer-events:none;z-index:3}.toast.show{opacity:1;transform:none}.mobile-menu{display:none}
+    @media(max-width:950px){.app{grid-template-columns:195px minmax(0,1fr)}main{padding:23px 24px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid,.lower-grid{grid-template-columns:1fr}.encrypted-layout{grid-template-columns:76px 200px minmax(0,1fr)}}
+    @media(max-width:950px){.opt-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){.app{display:block}aside{min-height:0;position:sticky;top:0;z-index:2;padding:12px 14px;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0;flex:1}.app aside{display:flex;flex-direction:row;align-items:center;gap:13px}.brand-mark{width:31px;height:31px}.side-spacer,.device-card,.nav-label{display:none}.nav{display:flex;overflow-x:auto;gap:3px;scrollbar-width:none}.nav button{font-size:0;padding:9px}.nav button svg{width:18px}.app aside>.nav{margin-left:auto}.app aside .nav button{min-width:34px;justify-content:center}main{padding:20px 15px 35px}.topbar{margin-bottom:21px}.heading-row{align-items:flex-start}.stamp{font-size:8px;padding:7px}.page-title{font-size:22px}.metrics{gap:8px}.metric{padding:12px}.metric-value{font-size:21px}.metric-bottom{font-size:8px}.row-grid,.bios-grid,.driver-grid,.opt-grid{grid-template-columns:1fr}.os-shortcuts{grid-template-columns:1fr}.panel{padding:14px}.health-layout{grid-template-columns:85px 1fr;gap:12px}.health-ring{width:82px;height:82px}.encrypted-layout{grid-template-columns:1fr;min-height:auto}.server-bar{flex-direction:row;justify-content:center;border-right:0;border-bottom:1px solid var(--line)}.channel-pane{border-right:0;border-bottom:1px solid var(--line)}.chat-header{padding:14px}.chat-feed{padding:12px 14px}.composer,.server-create{padding-left:14px;padding-right:14px}.toast{left:14px;right:14px;bottom:14px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+  </style>
+  <style>
+    .chat-workspace{display:grid;grid-template-columns:68px 218px minmax(0,1fr);height:min(68vh,680px);min-height:430px;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#121613}.guild-rail{display:flex;flex-direction:column;align-items:center;gap:10px;padding:13px 8px;background:#111512;border-right:1px solid var(--line);overflow-y:auto}.guild-button,.chat-icon-button{display:grid;place-items:center;border:1px solid #303a32;background:#1b211d;color:#dfe9df;font-weight:800}.guild-button{width:44px;height:44px;border-radius:14px;flex:none;transition:border-radius .15s,border-color .15s}.guild-button:hover,.guild-button.active{border-color:var(--lime);border-radius:12px;color:var(--lime)}.guild-button.create{color:var(--cyan);font-size:21px}.room-sidebar{display:flex;flex-direction:column;min-width:0;background:#171d19;border-right:1px solid var(--line)}.room-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 13px;border-bottom:1px solid var(--line);min-height:58px}.room-top strong{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chat-icon-button{width:28px;height:28px;border-radius:6px;color:var(--muted);font-size:18px;flex:none}.chat-icon-button:hover{border-color:var(--lime);color:var(--lime)}.room-label{padding:17px 13px 7px;color:var(--muted);font:9px var(--mono);letter-spacing:1px}.chat-channel-list{display:grid;align-content:start;gap:3px;padding:0 7px;overflow-y:auto}.chat-channel-button{display:flex;align-items:center;gap:7px;width:100%;padding:8px 9px;border:1px solid transparent;border-radius:5px;background:transparent;color:#aeb9b0;text-align:left;font-size:11px}.chat-channel-button::before{content:'#';font:12px var(--mono);color:#778278}.chat-channel-button:hover,.chat-channel-button.active{background:#252d27;color:var(--text)}.chat-channel-button.active{border-color:#374237}.local-profile{display:flex;align-items:center;gap:9px;margin-top:auto;padding:11px;border-top:1px solid var(--line);background:#141916}.chat-avatar{width:31px;height:31px;flex:none;display:grid;place-items:center;border-radius:9px;background:linear-gradient(145deg,#d4f47b,#77d9cb);color:#151b13;font:11px var(--mono);font-weight:700}.local-profile strong,.local-profile span{display:block;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.local-profile strong{font-size:10px}.local-profile span{margin-top:3px;color:var(--muted);font:8px var(--mono)}.chat-main{display:flex;flex-direction:column;min-width:0;background:#121714}.chat-room-header{height:58px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 17px;border-bottom:1px solid var(--line)}.chat-room-header strong{display:block;font-size:12px}.chat-room-header div span{display:block;margin-top:3px;color:var(--muted);font-size:9px}.local-indicator{padding:5px 7px;border:1px solid #475247;border-radius:4px;color:#b9c4b9;font:8px var(--mono);letter-spacing:.8px}.chat-messages{flex:1;display:flex;flex-direction:column;gap:15px;padding:17px;overflow-y:auto}.chat-empty{margin:auto;text-align:center;color:var(--muted);font-size:11px;line-height:1.6}.chat-message{display:flex;align-items:flex-start;gap:9px}.chat-message .chat-avatar{width:30px;height:30px}.chat-message-body{min-width:0}.chat-message-meta{display:flex;align-items:baseline;gap:8px;margin:1px 0 5px}.chat-message-meta strong{font-size:10px}.chat-message-meta time{color:var(--muted);font:8px var(--mono)}.chat-message-text{margin:0;color:#dce4dd;font-size:11px;line-height:1.55;overflow-wrap:anywhere;white-space:pre-wrap}.chat-composer{display:flex;gap:9px;padding:11px;border-top:1px solid var(--line)}.chat-composer input{flex:1;min-width:0;height:38px;padding:0 12px;border:1px solid #303a32;border-radius:6px;background:#1a201c;color:var(--text);font:11px var(--sans)}.chat-composer input:focus{outline:1px solid var(--lime);border-color:var(--lime)}.chat-composer button{min-width:64px;border:1px solid #89ad52;border-radius:6px;background:#c6f36a;color:#151a12;font-size:10px;font-weight:800}.free-chat-note{margin:10px 2px 0;color:var(--muted);font:9px var(--mono)}
+    .room-sidebar{overflow-y:auto}.social-room-label{display:flex;align-items:center;justify-content:space-between;padding-right:9px}.social-room-label .chat-icon-button{width:22px;height:22px;font-size:15px}.requests-label{display:flex;align-items:center;gap:7px}.requests-label span{color:var(--cyan)}.friend-list,.friend-request-list{display:grid;gap:4px;padding:0 7px;max-height:118px;overflow-y:auto}.friend-entry{display:flex;align-items:center;gap:8px;width:100%;padding:7px;border:1px solid transparent;border-radius:6px;background:transparent;color:#c4cec5;text-align:left}.friend-entry:hover,.friend-entry.active{border-color:#38453a;background:#222a23}.friend-entry .chat-avatar{width:28px;height:28px;border-radius:9px;font-size:9px}.friend-entry-copy{min-width:0;flex:1}.friend-entry-copy strong,.friend-entry-copy small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.friend-entry-copy strong{font-size:9px}.friend-entry-copy small{margin-top:3px;color:var(--muted);font:8px var(--mono)}.friend-request-card{padding:8px;border:1px solid #303a32;border-radius:6px;background:#141916}.friend-request-card strong,.friend-request-card small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.friend-request-card strong{font-size:9px}.friend-request-card small{margin-top:3px;color:var(--muted);font:8px var(--mono)}.friend-request-actions{display:flex;gap:5px;margin-top:7px}.friend-request-actions button{min-height:23px;padding:0 7px;border:1px solid #475647;border-radius:4px;background:#1c241d;color:#d8e4d7;font-size:8px}.friend-request-actions .accept-request{border-color:#809f56;background:#c6f36a;color:#12190e;font-weight:800}.friend-request-actions .decline-request{color:#efb0a8}.friend-pending{padding:6px 8px;color:#aab7ab;font:8px var(--mono)}.friend-list-empty,.friend-requests-empty{padding:7px;color:#818c82;font-size:9px}.chat-create-form{display:flex;gap:5px;padding:7px}.chat-create-form[hidden]{display:none}.chat-create-form input{width:100%;min-width:0;height:30px;padding:0 8px;border:1px solid #303a32;border-radius:5px;background:#101512;color:var(--text);font:9px var(--sans)}.chat-create-form button{border:1px solid #89ad52;border-radius:5px;background:#c6f36a;color:#151a12;padding:0 8px;font-size:9px;font-weight:700}
+    .chat-composer button:disabled{cursor:not-allowed;opacity:.48}
+    @media(max-width:950px){.chat-workspace{grid-template-columns:58px 180px minmax(0,1fr)}}
+    @media(max-width:640px){.chat-workspace{grid-template-columns:52px minmax(0,1fr);height:65vh;min-height:390px}.guild-rail{padding:10px 5px}.guild-button{width:38px;height:38px}.room-sidebar{grid-column:2;grid-row:1;max-height:150px;border-right:0;border-bottom:1px solid var(--line)}.room-top{min-height:46px;padding:8px 10px}.room-label{padding:8px 10px 4px}.chat-channel-list{display:flex;overflow-x:auto;overflow-y:hidden;padding:0 7px 7px}.chat-channel-button{width:auto;white-space:nowrap}.local-profile{display:none}.chat-main{grid-column:1 / -1;grid-row:2;min-height:0}.chat-room-header{height:48px;padding:0 12px}.chat-messages{padding:12px}.chat-composer{padding:9px}.free-chat-note{line-height:1.5}}
+    .account-menu{position:relative}.account-trigger{display:flex;align-items:center;gap:9px;min-width:178px;padding:5px 9px 5px 5px;border:1px solid #354138;border-radius:10px;background:linear-gradient(135deg,#1b241e,#141916);text-align:left;transition:border-color .16s,background .16s}.account-trigger:hover,.account-trigger[aria-expanded="true"]{border-color:#829b60;background:#202a22}.account-avatar{width:34px;height:34px;flex:none;display:grid;place-items:center;border:1px solid #d7f7a644;border-radius:10px;background:linear-gradient(145deg,#d4f47b,#77d9cb);background-position:center;background-size:cover;color:#121810;font:11px var(--mono);font-weight:800;overflow:hidden}.account-avatar.small{width:38px;height:38px;border:2px solid #171d19;border-radius:12px}.account-trigger-copy{min-width:0;flex:1}.account-trigger-copy strong,.account-trigger-copy small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.account-trigger-copy strong{font-size:10px}.account-trigger-copy small{margin-top:3px;color:#94a295;font:8px var(--mono)}.account-chevron{width:15px;height:15px;fill:none;stroke:#aab8aa;stroke-width:1.8;transition:transform .16s}.account-trigger[aria-expanded="true"] .account-chevron{transform:rotate(180deg)}.account-popover{position:absolute;z-index:8;top:calc(100% + 9px);right:0;width:274px;overflow:hidden;border:1px solid #374239;border-radius:12px;background:#171d19;box-shadow:0 20px 45px #0009}.account-popover[hidden]{display:none}.account-popover-banner{height:67px;background:linear-gradient(120deg,#b0e96d,#347e77)}.account-popover-user{display:flex;align-items:center;gap:10px;margin:-19px 13px 10px}.account-popover-user>span:last-child{min-width:0;padding-top:18px}.account-popover-user strong,.account-popover-user small{display:block;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.account-popover-user strong{font-size:11px}.account-popover-user small{margin-top:4px;color:#a3afa5;font-size:9px}.account-menu-item{display:flex;align-items:center;gap:10px;width:calc(100% - 14px);min-height:39px;margin:2px 7px;padding:0 9px;border:1px solid transparent;border-radius:7px;background:transparent;color:#dce5dc;text-decoration:none;text-align:left;font-size:10px}.account-menu-item:hover{border-color:#3a473d;background:#222a23}.menu-item-icon{width:20px;color:#a5d374;text-align:center;font-size:13px}.menu-item-arrow{margin-left:auto;color:#859187;font-size:15px}.menu-separator{height:1px;margin:7px 12px;background:#303832}.logout-item{min-height:42px;margin-bottom:8px;background:#2a1e1e;color:#ffc0b9}.logout-item:hover{border-color:#884d47;background:#3b2423}.logout-icon{width:20px;height:20px;display:grid;place-items:center;border-radius:6px;background:#65332e;color:#ffaaa0}.logout-icon svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.profile-dialog{width:min(94vw,510px);max-height:90vh;padding:0;border:1px solid #39443b;border-radius:14px;background:#171d19;color:var(--text);box-shadow:0 28px 80px #000b}.profile-dialog::backdrop{background:#050806c9;backdrop-filter:blur(5px)}.profile-dialog form{display:grid;gap:13px;padding:20px}.profile-dialog-head{display:flex;align-items:center;justify-content:space-between}.profile-dialog-head h2{margin:5px 0 0;font-size:17px}.profile-close{width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#202720;color:#ccd5cb;font-size:21px;line-height:1}.profile-preview{overflow:hidden;border:1px solid #343d35;border-radius:10px;background:#111613}.profile-banner-preview{position:relative;height:110px;background:linear-gradient(120deg,#b0e96d,#347e77);background-position:center;background-size:cover}.profile-avatar-preview{position:absolute;left:15px;bottom:-24px;width:68px;height:68px;border:4px solid #111613;border-radius:20px;background:linear-gradient(145deg,#d4f47b,#77d9cb);background-position:center;background-size:cover;color:#101610;font:14px var(--mono);font-weight:800}.profile-preview-copy{display:grid;gap:4px;padding:29px 16px 13px 96px}.profile-preview-copy strong{font-size:12px}.profile-preview-copy span{color:#a1aea2;font-size:9px}.profile-file-control{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#c7d1c7;font-size:10px}.profile-file-control input{max-width:215px;color:#9eaa9f;font:9px var(--sans)}.banner-themes{display:flex;gap:9px}.banner-swatch{width:34px;height:34px;padding:3px;border:1px solid #3b463d;border-radius:50%;background:#121613}.banner-swatch[aria-pressed="true"]{border-color:var(--lime);box-shadow:0 0 0 2px #c6f36a35}.banner-swatch span{display:block;width:100%;height:100%;border-radius:50%}.profile-field{display:grid;gap:6px;color:#c7d1c7;font-size:10px}.profile-field input,.profile-field textarea{width:100%;border:1px solid #354037;border-radius:7px;background:#111613;color:var(--text);padding:9px 10px;font:11px var(--sans);resize:vertical}.profile-field input:focus,.profile-field textarea:focus{outline:1px solid var(--lime);border-color:var(--lime)}.profile-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:3px}.profile-cancel,.profile-save{min-height:35px;padding:0 13px;border:1px solid #3b463d;border-radius:7px;background:#202720;color:#dce5dc;font-size:10px}.profile-save{border-color:#9cbe61;background:#c6f36a;color:#141a11;font-weight:800}.profile-cancel:hover{border-color:#7a897a}.profile-save:hover{background:#d4ff7a}
+    .account-menu-item[hidden],.account-about[hidden]{display:none}.account-popover-user .account-about{display:block;max-width:190px;margin-top:5px;color:#a5b1a6;font-size:9px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
+    @media(max-width:640px){.account-trigger{min-width:0;padding-right:6px}.account-trigger-copy{display:none}.account-chevron{display:none}.account-popover{width:min(274px,calc(100vw - 28px))}.profile-dialog form{padding:15px}}
+    .launch-screen{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:radial-gradient(circle at center,#1f2b23 0%,#111613 35%,#0d110f 100%);color:var(--text);transition:opacity .6s ease, visibility .6s ease;}
+    .launch-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .launch-core{position:relative;display:grid;place-items:center;gap:12px;transform:scale(0.96);animation:launch-pop 1s ease-out forwards}
+    .launch-ring{position:absolute;width:160px;height:160px;border-radius:50%;border:1px solid rgba(198,243,106,.5);box-shadow:0 0 25px rgba(198,243,106,.2), inset 0 0 18px rgba(120,217,208,.15);animation:launch-ring 1.6s ease-in-out infinite}
+    .launch-mark{position:relative;width:72px;height:72px;border-radius:18px;background:linear-gradient(160deg,#d9ff84,#b7eb59);color:#111813;display:grid;place-items:center;box-shadow:0 0 40px rgba(198,243,106,.38)}
+    .launch-mark svg{width:34px;height:34px}
+    .launch-name{font-size:15px;font-weight:800;letter-spacing:4px;color:#edf2ec}
+    .launch-subtitle{font:10px var(--mono);letter-spacing:3px;color:var(--muted)}
+    .window-shell{position:relative;display:block;background:transparent;min-height:100vh}
+    .window-shell::before{content:"";position:fixed;left:12px;top:12px;right:12px;bottom:12px;border:1px solid rgba(157,171,160,.14);border-radius:18px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03)}
+    .update-screen{position:fixed;inset:0;z-index:10;display:grid;place-items:center;background:var(--bg);color:var(--text)}
+    .update-screen[hidden]{display:none}
+    .update-screen-content{display:grid;justify-items:center;gap:12px;text-align:center}
+    .update-screen .brand-mark{width:46px;height:46px}
+    .update-spinner{width:24px;height:24px;border:2px solid var(--line);border-top-color:var(--lime);border-radius:50%;animation:update-spin .8s linear infinite}
+    .update-screen p{margin:0;color:var(--muted);font:10px var(--mono)}
+    @keyframes update-spin{to{transform:rotate(360deg)}}
+    @keyframes launch-ring{0%{transform:scale(.85);opacity:.2}50%{transform:scale(1.08);opacity:1}100%{transform:scale(1.18);opacity:.25}}
+    @keyframes launch-pop{0%{opacity:0;transform:scale(.6) translateY(12px)}40%{opacity:1;transform:scale(1.05) translateY(0)}100%{opacity:1;transform:scale(1)}}
+    @media(prefers-reduced-motion:reduce){.update-spinner{animation:none}.launch-ring,.launch-core{animation:none}.launch-screen{transition:none}}
+  </style>
+</head>
+<body>
+<div class="launch-screen" id="launch-screen" aria-live="polite" aria-label="Launching Wembux">
+  <div class="launch-core">
+    <div class="launch-ring"></div>
+    <div class="launch-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13.2 2 5 13h6l-.3 9L19 10h-6l.2-8Z"/></svg></div>
+    <div class="launch-name">WEMBUX</div>
+    <div class="launch-subtitle">INITIALIZING SYSTEM</div>
+  </div>
+</div>
+<div class="update-screen" id="update-screen" role="status" aria-live="polite" hidden>
+  <div class="update-screen-content">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13.2 2 5 13h6l-.3 9L19 10h-6l.2-8Z"/></svg></div>
+    <strong>Wembux</strong>
+    <span class="update-spinner" aria-hidden="true"></span>
+    <p id="update-status">Checking for updates...</p>
+  </div>
+</div>
+<div class="window-shell"><div class="app">
+  <aside>
+    <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13.2 2 5 13h6l-.3 9L19 10h-6l.2-8Z"/></svg></div><div><div class="brand-name">wem<span style="color:var(--lime)">bux</span></div><div class="brand-sub">PC CONTROL CENTER</div></div></div>
+    <div class="nav-label">Workspace</div>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="active" data-page="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg>Overview</button>
+      <button data-page="performance"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h17M8 15l4-5 3 2 5-7"/></svg>Performance</button>
+      <button data-page="optimize"><svg viewBox="0 0 24 24"><path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3Z"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/></svg>Optimize</button>
+      <button data-page="startup"><svg viewBox="0 0 24 24"><path d="M12 3v9m-6.2-6A9 9 0 1 0 18.2 6"/></svg>Startup</button>
+      <button data-page="encrypted"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12v9H6z"/><path d="M12 13v3"/></svg>ENCRYPTED</button>
+      <button data-page="storage"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18m-13 5h.01M8 15h.01"/></svg>Storage</button>
+      <button data-page="drivers"><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/></svg>Drivers</button>
+      <button data-page="bios-activate"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l1-7Z"/></svg>BIOS activate</button>
+      <button data-page="bios"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8h8m-8 4h8m-8 4h4"/></svg>BIOS guide</button>
+    </nav>
+    <div class="side-spacer"></div>
+    <div class="device-card"><div class="device-head"><i class="device-dot"></i><span>DEMO DEVICE</span></div><div class="device-name">Windows PC</div><div class="device-caption">Sample system profile</div><div class="device-foot"><span>LOCAL PREVIEW</span><span>v0.1</span></div></div>
+  </aside>
+  <main>
+    <div class="topbar"><div class="crumb">WEMBUX <span style="color:#586258">/</span> <b id="crumb">OVERVIEW</b></div><div class="top-actions"><button class="icon-button" title="Notifications" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg></button><div class="account-menu" id="account-menu"><button class="account-trigger" id="account-trigger" type="button" aria-haspopup="true" aria-expanded="false"><span class="account-avatar" id="user-badge">W</span><span class="account-trigger-copy"><strong id="account-name">Wembux User</strong><small>YOUR PROFILE</small></span><svg class="account-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button><div class="account-popover" id="account-popover" hidden><div class="account-popover-banner" id="account-menu-banner"></div><div class="account-popover-user"><span class="account-avatar small" id="account-menu-avatar">W</span><span><strong id="account-menu-name">Wembux User</strong><small id="account-menu-status">Ready to chat</small></span></div><button class="account-menu-item" id="open-profile-editor" type="button"><span class="menu-item-icon">✎</span><span>Edit profile</span><span class="menu-item-arrow">›</span></button><a class="account-menu-item admin-menu-item" id="admin-link" href="./account-admin.html" hidden><span class="menu-item-icon">⌘</span><span>Account moderation</span><span class="menu-item-arrow">›</span></a><div class="menu-separator"></div><button class="account-menu-item logout-item" id="logout-link" type="button"><span class="logout-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5m5 5H3m9-9h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7"/></svg></span><span>Sign out</span><span class="menu-item-arrow">↗</span></button></div></div></div></div>
+    <section class="page active" id="page-overview">
+      <div class="heading-row"><div><div class="eyebrow">SYSTEM OVERVIEW</div><h1 class="page-title">Your PC, at a glance.</h1><p class="page-desc">A calm read on the things that shape everyday performance.</p></div><div class="stamp">SAMPLE SNAPSHOT · 10:42 AM</div></div>
+      <div class="notice"><span class="notice-mark">!</span><span><strong>Preview data, not live telemetry.</strong> Connect a trusted Windows service to read actual hardware metrics or apply system changes.</span></div>
+      <div class="metrics">
+        <article class="metric"><div class="metric-top"><span>PROCESSOR</span><span class="metric-icon">⌁</span></div><div class="metric-value">34<span class="metric-unit">%</span></div><div class="meter"><span style="width:34%"></span></div><div class="metric-bottom">8 cores <span>·</span> sample load</div></article>
+        <article class="metric"><div class="metric-top"><span>MEMORY</span><span class="metric-icon">▥</span></div><div class="metric-value">9.2<span class="metric-unit"> GB</span></div><div class="meter"><span style="width:58%"></span></div><div class="metric-bottom">of 16 GB <span>·</span> sample use</div></article>
+        <article class="metric"><div class="metric-top"><span>GPU</span><span class="metric-icon">◈</span></div><div class="metric-value">41<span class="metric-unit">%</span></div><div class="meter"><span style="width:41%"></span></div><div class="metric-bottom">Dedicated graphics <span>·</span> sample</div></article>
+        <article class="metric"><div class="metric-top"><span>BOOT TIME</span><span class="metric-icon">↗</span></div><div class="metric-value">22<span class="metric-unit"> sec</span></div><div class="meter"><span style="width:72%"></span></div><div class="metric-bottom">Last boot <span>·</span> example</div></article>
+      </div>
+      <div class="content-grid">
+        <section class="panel"><div class="panel-head"><div class="panel-title">Resource activity</div><div class="legend"><span><i></i>CPU</span><span><i></i>MEMORY</span></div></div>
+          <svg class="chart" viewBox="0 0 600 160" preserveAspectRatio="none" role="img" aria-label="Illustrative CPU and memory history chart"><defs><linearGradient id="limeFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#c6f36a" stop-opacity=".18"/><stop offset="1" stop-color="#c6f36a" stop-opacity="0"/></linearGradient><linearGradient id="cyanFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#78d9d0" stop-opacity=".11"/><stop offset="1" stop-color="#78d9d0" stop-opacity="0"/></linearGradient></defs><g stroke="#2a312c" stroke-width="1"><path d="M0 20H600M0 58H600M0 96H600M0 134H600"/></g><path d="M0 104 C30 98 37 73 67 80 C97 87 106 112 136 92 C166 72 171 57 201 69 C231 81 237 93 267 78 C297 63 304 98 334 70 C364 42 371 61 401 75 C431 89 438 51 468 62 C498 73 505 88 535 55 C565 22 571 76 600 46 V160 H0 Z" fill="url(#limeFill)"/><path d="M0 104 C30 98 37 73 67 80 C97 87 106 112 136 92 C166 72 171 57 201 69 C231 81 237 93 267 78 C297 63 304 98 334 70 C364 42 371 61 401 75 C431 89 438 51 468 62 C498 73 505 88 535 55 C565 22 571 76 600 46" fill="none" stroke="#c6f36a" stroke-width="2"/><path d="M0 124 C36 118 49 105 77 108 C105 111 123 120 151 111 C179 102 192 92 220 98 C248 104 260 112 288 102 C316 92 329 111 357 94 C385 77 402 103 430 91 C458 79 470 96 498 105 C526 114 541 86 569 99 C597 112 602 83 600 83 V160 H0 Z" fill="url(#cyanFill)"/><path d="M0 124 C36 118 49 105 77 108 C105 111 123 120 151 111 C179 102 192 92 220 98 C248 104 260 112 288 102 C316 92 329 111 357 94 C385 77 402 103 430 91 C458 79 470 96 498 105 C526 114 541 86 569 99 C597 112 602 83 600 83" fill="none" stroke="#78d9d0" stroke-width="1.5"/></svg><div class="chart-labels"><span>10:00</span><span>10:10</span><span>10:20</span><span>10:30</span><span>NOW</span></div></section>
+        <section class="panel"><div class="panel-head"><div class="panel-title">System health</div><span class="panel-meta">SAMPLE</span></div><div class="health-layout"><div class="health-ring"><b>82<small>HEALTH</small></b></div><div class="health-copy"><strong>Room to tune</strong><p>A few common checks can help keep a PC feeling responsive.</p></div></div><div class="health-list"><div class="health-item"><span>Startup impact</span><b>REVIEW</b></div><div class="health-item"><span>Storage space</span><b>OK</b></div><div class="health-item"><span>Power mode</span><b>BALANCED</b></div></div></section>
+      </div>
+      <div class="lower-grid"><section class="panel"><div class="panel-head"><div class="panel-title">Performance profile</div><span class="panel-meta">WINDOWS POWER PLAN</span></div><div class="profile-options"><button class="profile selected" data-profile="Balanced"><span class="profile-mark">✓</span><strong>Balanced</strong><span>Everyday efficiency and responsiveness.</span></button><button class="profile" data-profile="Performance"><span class="profile-mark">✓</span><strong>Performance</strong><span>Prioritize speed; may use more power.</span></button><button class="profile" data-profile="Quiet"><span class="profile-mark">✓</span><strong>Quiet</strong><span>Favor lower fan noise and power.</span></button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:11px"><span class="panel-meta" id="profile-status">Balanced selected</span><button class="inline-link" data-apply-power>APPLY PROFILE ↗</button></div></section>
+        <section class="panel"><div class="panel-head"><div class="panel-title">Quick checks</div><span class="panel-meta">REVIEW FIRST</span></div><div class="action-list"><div class="action-row"><div class="action-copy"><strong>Startup apps</strong><span>Review what launches at sign-in</span></div><button class="action-btn" data-go="startup">REVIEW</button></div><div class="action-row"><div class="action-copy"><strong>Storage cleanup</strong><span>See categories before taking action</span></div><button class="action-btn" data-go="storage">INSPECT</button></div><div class="action-row"><div class="action-copy"><strong>Firmware settings</strong><span>Vendor-specific BIOS guidance</span></div><button class="action-btn" data-go="bios">OPEN GUIDE</button></div></div></section></div>
+    </section>
+    <section class="page" id="page-optimize"><div class="heading-row"><div><div class="eyebrow">GUIDED TUNING</div><h1 class="page-title">Optimization hub</h1><p class="page-desc">A guided path to better performance, with control over every change.</p></div><div class="stamp">NO SILENT CHANGES</div></div><div class="notice"><span class="notice-mark">!</span><span><strong>“Max” settings are not universal.</strong> This browser app cannot inspect your hardware or write BIOS/driver settings. Use the vendor tools below; checklist progress is saved only in this browser.</span></div><div class="opt-grid"><section class="panel"><div class="panel-head"><div class="panel-title">Graphics driver tune-up</div><span class="panel-meta">VENDOR TOOL</span></div><div class="setting-row"><div class="setting-copy"><strong>Select your GPU vendor</strong><p>Choose the maker of your graphics card, not necessarily your PC brand.</p></div><select class="select-control" id="gpu-vendor" aria-label="Graphics vendor"><option value="nvidia">NVIDIA</option><option value="amd">AMD</option><option value="intel">Intel</option><option value="unknown">Not sure</option></select></div><div class="setting-row"><div class="setting-copy"><strong>Open official driver tools</strong><p id="gpu-guidance">Use NVIDIA's official driver finder and select your exact GPU and Windows version.</p></div><a class="action-btn quick-action" id="gpu-link" href="https://www.nvidia.com/Download/index.aspx" target="_blank" rel="noopener noreferrer">OPEN NVIDIA ↗</a></div><div class="checklist" id="driver-checklist"><label class="check-row"><input type="checkbox" data-check="driver-backup"><span class="check-copy"><strong>Create a restore point</strong><span>Have a recovery option before a major driver change.</span></span></label><label class="check-row"><input type="checkbox" data-check="driver-model"><span class="check-copy"><strong>Confirm GPU model and Windows version</strong><span>Use Device Manager or the PC maker's specifications; do not guess.</span></span></label><label class="check-row"><input type="checkbox" data-check="driver-install"><span class="check-copy"><strong>Install from the official vendor</strong><span>Read installer options and restart if requested by the vendor.</span></span></label><label class="check-row"><input type="checkbox" data-check="driver-verify"><span class="check-copy"><strong>Verify stability after restart</strong><span>Test your normal apps and games before changing more settings.</span></span></label></div><div class="check-progress"><span id="driver-progress"></span></div><div class="panel-meta" id="driver-progress-label">0 of 4 steps complete</div></section><section class="panel"><div class="panel-head"><div class="panel-title">Firmware tune-up</div><span class="panel-meta">BIOS / UEFI</span></div><p class="page-desc" style="line-height:1.65">Use the exact manual for your motherboard or PC model. Save current values and change one setting at a time.</p><div class="checklist" id="bios-checklist" style="margin-top:9px"><label class="check-row"><input type="checkbox" data-check="bios-model"><span class="check-copy"><strong>Identify your exact motherboard or PC</strong><span>Firmware menus differ by model and revision.</span></span></label><label class="check-row"><input type="checkbox" data-check="bios-manual"><span class="check-copy"><strong>Read the manufacturer's manual</strong><span>Use the official support page and model-specific instructions.</span></span></label><label class="check-row"><input type="checkbox" data-check="bios-recovery"><span class="check-copy"><strong>Prepare recovery and encryption keys</strong><span>Keep BitLocker recovery information available before firmware changes.</span></span></label><label class="check-row"><input type="checkbox" data-check="bios-xmp"><span class="check-copy"><strong>Review XMP / EXPO only if supported</strong><span>Memory profiles can improve rated speed but may need stability testing.</span></span></label></div><div class="check-progress"><span id="bios-progress"></span></div><div class="panel-meta" id="bios-progress-label">0 of 4 steps complete</div><div class="safe-note"><strong class="risk-label">High risk:</strong> No automatic voltage, CPU overclock, power-limit, or firmware-flash actions. Incorrect values can make a PC unstable or unbootable.</div><a class="action-btn quick-action" href="#page-bios" data-go="bios">OPEN BIOS GUIDE ↗</a><a class="action-btn quick-action" href="ms-settings:recovery">OPEN ADVANCED STARTUP ↗</a></section></div><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Windows gaming and power checklist</div><span class="panel-meta">USER-REVIEWED SETTINGS</span></div><div class="os-shortcuts"><a class="os-shortcut" href="ms-settings:gaming-gamemode">Game Mode <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:display-advancedgraphics">Per-app GPU choice <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:powersleep">Power mode <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:display">Refresh rate <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:windowsupdate">Windows Update <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:startupapps">Startup apps <span>OPEN ↗</span></a></div></section><div class="safe-note"><strong>Performance first, not “max at any cost”:</strong> use the vendor-recommended driver, ensure cooling is clean and working, and test changes one at a time. A faster setting that overheats or crashes is not an optimization.</div></section>
+    <section class="page" id="page-performance"><div class="heading-row"><div><div class="eyebrow">TUNE WITH INTENT</div><h1 class="page-title">Performance</h1><p class="page-desc">Choose a sensible direction for your workload.</p></div></div><div class="notice"><span class="notice-mark">!</span><span><strong>Applying a profile changes your Windows power plan.</strong> Balanced, High performance, and Power saver are reversible in Windows Settings.</span></div><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Power profile</div><span class="panel-meta">WINDOWS POWER PLAN</span></div><div class="profile-options"><button class="profile selected" data-profile="Balanced"><span class="profile-mark">✓</span><strong>Balanced</strong><span>Recommended for most people. Lets Windows balance performance and energy use.</span></button><button class="profile" data-profile="Performance"><span class="profile-mark">✓</span><strong>Performance</strong><span>For demanding workloads. Higher power use and heat are possible.</span></button><button class="profile" data-profile="Quiet"><span class="profile-mark">✓</span><strong>Quiet</strong><span>Uses Windows Power saver to reduce power use; fan behavior depends on your PC.</span></button></div><div style="display:flex;justify-content:flex-end;margin-top:13px"><button class="action-btn" data-apply-power>APPLY SELECTED PROFILE</button></div></section><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Windows tuning shortcuts</div><span class="panel-meta">OPENS WINDOWS SETTINGS</span></div><div class="os-shortcuts"><a class="os-shortcut" href="ms-settings:powersleep">Power & sleep <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:display-advancedgraphics">Graphics preference <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:display">Display & refresh rate <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:gaming-gamemode">Game Mode <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:startupapps">Startup apps <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:windowsupdate">Windows Update <span>OPEN ↗</span></a></div></section><div class="row-grid"><section class="panel section-panel"><div class="panel-title">Good tuning habits</div><div class="health-list" style="margin-top:13px"><div class="health-item"><span>Keep chipset and GPU drivers current</span><b>VENDOR</b></div><div class="health-item"><span>Check temperatures under real load</span><b>MONITOR</b></div><div class="health-item"><span>Change one setting at a time</span><b>RECOMMENDED</b></div></div></section><section class="panel section-panel"><div class="panel-title">Before you tune</div><p class="page-desc" style="line-height:1.7;margin-top:9px">Record the current value, check your device maker's guidance, and make sure you can undo the change. Overclocking and voltage changes can cause instability or damage.</p></section></div></section>
+    <section class="page" id="page-startup"><div class="heading-row"><div><div class="eyebrow">BOOT SEQUENCE</div><h1 class="page-title">Startup</h1><p class="page-desc">Review what opens when you sign in.</p></div><div class="stamp">EXAMPLE LIST</div></div><div class="notice"><span class="notice-mark">!</span><span><strong>Nothing here controls Windows.</strong> These sample switches are for previewing the interface; use Task Manager → Startup apps to manage real entries.</span></div><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Sign-in apps</div><span class="panel-meta">3 EXAMPLE ITEMS</span></div><div class="setting-row"><div class="setting-copy"><strong>Cloud sync</strong><p>Example · medium impact · starts at sign-in</p></div><button class="switch on" aria-label="Toggle Cloud sync example" aria-pressed="true"></button></div><div class="setting-row"><div class="setting-copy"><strong>Game launcher</strong><p>Example · high impact · starts at sign-in</p></div><button class="switch on" aria-label="Toggle Game launcher example" aria-pressed="true"></button></div><div class="setting-row"><div class="setting-copy"><strong>Audio utility</strong><p>Example · low impact · starts at sign-in</p></div><button class="switch" aria-label="Toggle Audio utility example" aria-pressed="false"></button></div></section><div class="safe-note"><strong>Keep security and device utilities enabled.</strong> Disabling sync, audio, security, or hardware tools can remove features you rely on. Check the publisher and impact before changing startup behavior.</div></section>
+    <section class="page" id="page-drivers"><div class="heading-row"><div><div class="eyebrow">OFFICIAL SOURCES</div><h1 class="page-title">Driver downloads</h1><p class="page-desc">Get drivers directly from the people who make your hardware.</p></div><div class="stamp">EXTERNAL LINKS</div></div><div class="notice"><span class="notice-mark">!</span><span><strong>Pick the exact product and Windows version.</strong> PulseDeck does not identify your hardware or install downloads. Avoid third-party driver sites and ads.</span></div><div class="driver-grid"><article class="driver-card"><div class="driver-card-head"><h2>AMD</h2><span class="panel-meta">GPU · CHIPSET</span></div><p>Radeon graphics and AMD chipset drivers. Use AMD's product selector or official auto-detect tool.</p><a class="action-btn" href="https://www.amd.com/en/support/download/drivers.html" target="_blank" rel="noopener noreferrer">AMD SUPPORT ↗</a></article><article class="driver-card"><div class="driver-card-head"><h2>NVIDIA</h2><span class="panel-meta">GEFORCE · RTX</span></div><p>GeForce Game Ready and Studio drivers. Select the GPU model and operating system before downloading.</p><a class="action-btn" href="https://www.nvidia.com/Download/index.aspx" target="_blank" rel="noopener noreferrer">NVIDIA DOWNLOADS ↗</a></article><article class="driver-card"><div class="driver-card-head"><h2>Intel</h2><span class="panel-meta">ARC · GRAPHICS · CHIPSET</span></div><p>Intel graphics, Wi-Fi, Bluetooth, and other hardware. Laptop makers may provide customized packages.</p><a class="action-btn" href="https://www.intel.com/content/www/us/en/download-center/home.html" target="_blank" rel="noopener noreferrer">INTEL DOWNLOAD CENTER ↗</a></article><article class="driver-card"><div class="driver-card-head"><h2>PC manufacturer</h2><span class="panel-meta">LAPTOP · OEM</span></div><p>For laptops and prebuilt PCs, use the maker's support page and search by the exact model or serial number.</p><a class="action-btn" href="https://www.dell.com/support/home/" target="_blank" rel="noopener noreferrer">DELL SUPPORT ↗</a></article></div><section class="panel section-panel"><div class="panel-head"><div class="panel-title">More PC maker support</div><span class="panel-meta">OFFICIAL OEM PAGES</span></div><div class="os-shortcuts"><a class="os-shortcut" href="https://support.hp.com/drivers" target="_blank" rel="noopener noreferrer">HP drivers <span>WEB ↗</span></a><a class="os-shortcut" href="https://pcsupport.lenovo.com/" target="_blank" rel="noopener noreferrer">Lenovo support <span>WEB ↗</span></a><a class="os-shortcut" href="https://www.asus.com/support/download-center/" target="_blank" rel="noopener noreferrer">ASUS downloads <span>WEB ↗</span></a></div></section><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Other driver routes</div><span class="panel-meta">WINDOWS TOOLS</span></div><div class="os-shortcuts"><a class="os-shortcut" href="ms-settings:windowsupdate">Windows Update <span>OPEN ↗</span></a><a class="os-shortcut" href="ms-settings:windowsupdate-optionalupdates">Optional updates <span>OPEN ↗</span></a><a class="os-shortcut" href="https://www.microsoft.com/software-download/windows11" target="_blank" rel="noopener noreferrer">Windows 11 support <span>WEB ↗</span></a></div></section><div class="safe-note"><strong>Before installing:</strong> Confirm your exact GPU or PC model, choose the matching Windows version, and create a restore point for major driver updates. Close games and other GPU-heavy apps during installation; follow the vendor's prompts.</div></section>
+    <section class="page" id="page-storage"><div class="heading-row"><div><div class="eyebrow">SPACE & CLEANUP</div><h1 class="page-title">Storage</h1><p class="page-desc">Understand what's using space before you remove anything.</p></div><div class="stamp">SAMPLE DISK · C:</div></div><div class="notice"><span class="notice-mark">!</span><span><strong>Example storage breakdown.</strong> No files are scanned or deleted in this browser preview.</span></div><div class="row-grid"><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Disk usage</div><span class="panel-meta">SSD · EXAMPLE</span></div><div class="metric-value" style="font-size:22px">386<span class="metric-unit"> GB used</span></div><div class="storage-bar" style="margin:13px 0 17px"><i style="width:64%"></i></div><div class="storage-line"><div class="storage-line-head"><span>Apps & features</span><span>142 GB</span></div><div class="storage-bar"><i style="width:37%;background:var(--lime)"></i></div></div><div class="storage-line"><div class="storage-line-head"><span>Temporary files</span><span>18 GB</span></div><div class="storage-bar"><i style="width:12%;background:var(--orange)"></i></div></div><div class="storage-line"><div class="storage-line-head"><span>Documents & media</span><span>226 GB</span></div><div class="storage-bar"><i style="width:59%;background:#89a9e8"></i></div></div></section><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Cleanup review</div><span class="panel-meta">NOTHING SELECTED</span></div><div class="setting-row"><div class="setting-copy"><strong>Temporary files</strong><p>Review in Windows Settings</p></div><span class="panel-meta">18 GB*</span></div><div class="setting-row"><div class="setting-copy"><strong>Recycle Bin</strong><p>Check contents before emptying</p></div><span class="panel-meta">CHECK</span></div><div class="setting-row"><div class="setting-copy"><strong>Downloads</strong><p>Personal files; inspect manually</p></div><span class="panel-meta">KEEP</span></div><button class="action-btn" style="margin-top:10px" data-toast="Open Windows Settings → System → Storage to review actual files.">OPEN WINDOWS STORAGE SETTINGS ↗</button></section></div><div class="safe-note"><strong>*Example amount only.</strong> Avoid one-click cleaners that remove personal files, browser data, or restore points without showing exactly what will be deleted.</div></section>
+    <section class="page" id="page-bios"><div class="heading-row"><div><div class="eyebrow">FIRMWARE, SAFELY</div><h1 class="page-title">BIOS guide</h1><p class="page-desc">Understand common settings; make changes in your firmware setup.</p></div></div><div class="notice"><span class="notice-mark">i</span><span><strong>BIOS/UEFI is controlled by your motherboard or PC maker.</strong> This app cannot read or write those settings. Names, options, and safe values vary by model.</span></div><div class="bios-grid"><article class="bios-item"><div class="bios-item-top"><h3>Memory profile · XMP / EXPO</h3><span class="bios-tag">OPTIONAL</span></div><p>Can let compatible memory run at its rated profile. Confirm CPU and motherboard support; stability testing may be needed.</p></article><article class="bios-item"><div class="bios-item-top"><h3>Boot order</h3><span class="bios-tag">USE CASE</span></div><p>Chooses which drive or device starts first. Keep your operating-system drive available, especially during installation or recovery.</p></article><article class="bios-item"><div class="bios-item-top"><h3>Virtualization</h3><span class="bios-tag">FEATURE</span></div><p>Often called SVM or Intel VT-x. Needed for some virtual machines and development tools; enabling it alone does not speed up games.</p></article><article class="bios-item"><div class="bios-item-top"><h3>Secure Boot & TPM</h3><span class="bios-tag">SECURITY</span></div><p>Support Windows security features. Avoid disabling them without a specific reason; encryption recovery keys may be needed after firmware changes.</p></article><article class="bios-item"><div class="bios-item-top"><h3>Fan curves</h3><span class="bios-tag">THERMALS</span></div><p>Balance cooling noise and temperatures. Change gradually and verify temperatures under load using a trusted monitor.</p></article><article class="bios-item"><div class="bios-item-top"><h3>CPU voltage / overclock</h3><span class="bios-tag" style="color:var(--red)">ADVANCED RISK</span></div><p>Can cause overheating, instability, data loss, or hardware damage. Do not apply preset values without expert model-specific guidance.</p></article></div><div class="safe-note"><strong>Safer route:</strong> Find your exact PC or motherboard model, read its official manual, back up important data, and locate the vendor's instructions for entering UEFI. Do not flash firmware unless the vendor directs you to do so.</div><section class="panel section-panel"><div class="panel-head"><div class="panel-title">Finding your firmware setup</div><span class="panel-meta">WINDOWS</span></div><p class="page-desc" style="line-height:1.8">On many Windows 11 PCs: Settings → System → Recovery → Advanced startup → Restart now → Troubleshoot → Advanced options → UEFI Firmware Settings. Some devices instead use a key such as F2, Del, Esc, or F10 during startup; check the manufacturer's manual.</p></section></section>
+    <section class="page" id="page-bios-activate"><div class="heading-row"><div><div class="eyebrow">MSI FIRMWARE</div><h1 class="page-title">Activate a BIOS option</h1><p class="page-desc">Choose a topic, then restart into firmware to change it there.</p></div><div class="stamp">MSI A520M-A PRO</div></div><div class="notice"><span class="notice-mark">!</span><span><strong>Wembux cannot write BIOS values from Windows.</strong> Activation opens MSI Click BIOS. You must locate the option, review its value, and save it yourself. Wrong firmware values can prevent Windows from starting.</span></div><section class="panel section-panel"><div class="panel-head"><div class="panel-title">BIOS setting</div><span class="panel-meta">TOPIC GUIDE</span></div><div class="setting-row"><div class="setting-copy"><strong>Choose an option to work on</strong><p id="bios-action-guidance">A-XMP can run supported memory at its rated profile. Confirm compatibility and test stability.</p></div><select id="bios-action-topic" class="select-control" aria-label="BIOS option"><option value="memory">Memory profile (A-XMP)</option><option value="boot">Boot order</option><option value="virtualization">CPU virtualization (SVM)</option><option value="security">Secure Boot / TPM</option><option value="fans">Fan curves</option></select></div><div class="check-note" id="bios-action-location">On many MSI Click BIOS versions: OC → A-XMP. Menu names can differ by BIOS version.</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="action-btn" id="activate-bios-option">ACTIVATE: RESTART INTO UEFI</button><button class="action-btn" id="cancel-bios-activation">CANCEL PENDING RESTART</button></div><div class="safe-note"><strong>Before activating:</strong> Save your work and connect a laptop to power. Wembux schedules a restart in 60 seconds so you have time to cancel. After changing firmware, save only if you understand the effect.</div></section><section class="panel section-panel"><div class="panel-head"><div class="panel-title">This PC</div><span class="panel-meta">READ-ONLY HARDWARE INFO</span></div><div class="health-list"><div class="health-item"><span>Motherboard</span><b>MSI A520M-A PRO</b></div><div class="health-item"><span>Board ID</span><b>MS-7C96</b></div><div class="health-item"><span>BIOS version</span><b>1.L1</b></div></div></section></section>
+    <section class="page" id="page-bios-activate"><div class="heading-row"><div><div class="eyebrow">MSI FIRMWARE</div><h1 class="page-title">Activate a BIOS option</h1><p class="page-desc">Choose a topic, then restart into firmware to change it there.</p></div><div class="stamp">MSI A520M-A PRO</div></div><div class="notice"><span class="notice-mark">!</span><span><strong>Wembux cannot write BIOS values from Windows.</strong> Activation opens MSI Click BIOS. You must locate the option, review its value, and save it yourself. Wrong firmware values can prevent Windows from starting.</span></div><section class="panel section-panel"><div class="panel-head"><div class="panel-title">BIOS setting</div><span class="panel-meta">TOPIC GUIDE</span></div><div class="setting-row"><div class="setting-copy"><strong>Choose what you want to adjust</strong><p id="bios-action-guidance">A-XMP can run supported memory at its rated profile. Confirm compatibility and test stability.</p></div><select id="bios-action-topic" class="select-control" aria-label="BIOS option"><option value="memory">Memory profile (A-XMP)</option><option value="boot">Boot order</option><option value="virtualization">CPU virtualization (SVM)</option><option value="security">Secure Boot / TPM</option><option value="fans">Fan curves</option></select></div><div class="check-note" id="bios-action-location">MSI Click BIOS: OC &gt; A-XMP. Use only a profile printed on your memory kit; do not guess.</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="action-btn" id="activate-bios-option">ACTIVATE: RESTART INTO UEFI</button><button class="action-btn" id="cancel-bios-activation">CANCEL PENDING RESTART</button></div><div class="safe-note"><strong>Before activating:</strong> Save your work and connect a laptop to power. Wembux schedules a restart in 60 seconds so you have time to cancel. After changing firmware, save only if you understand the effect.</div></section><section class="panel section-panel"><div class="panel-head"><div class="panel-title">This PC</div><span class="panel-meta">READ-ONLY HARDWARE INFO</span></div><div class="health-list"><div class="health-item"><span>Motherboard</span><b>MSI A520M-A PRO</b></div><div class="health-item"><span>Board ID</span><b>MS-7C96</b></div><div class="health-item"><span>BIOS version</span><b>1.L1</b></div></div></section></section>
+    <section class="page" id="page-encrypted">
+      <div class="heading-row"><div><div class="eyebrow">COMMUNITY CHAT</div><h1 class="page-title">ENCRYPTED</h1><p class="page-desc">Servers, channels, and chat. Everything here is free.</p></div><div class="stamp">NO PAID UPGRADES</div></div>
+      <div class="notice"><span class="notice-mark">i</span><span><strong>Hosted chat:</strong> Accounts, friend requests, servers, and messages sync through the Wembux server. HTTPS protects connections; messages are not end-to-end encrypted.</span></div>
+      <div class="chat-workspace">
+        <aside class="guild-rail" id="chat-servers" aria-label="Servers"></aside>
+        <aside class="room-sidebar">
+          <div class="room-top"><strong id="chat-server-name">Server</strong><button class="chat-icon-button" id="create-chat-channel" type="button" title="Create channel" aria-label="Create channel">+</button></div>
+          <form class="chat-create-form" id="chat-server-form" hidden><input id="chat-server-input" type="text" maxlength="32" placeholder="Server name" aria-label="Server name" required /><button type="submit">Create</button></form>
+          <form class="chat-create-form" id="chat-server-join-form" hidden><input id="chat-server-id-input" type="text" maxlength="64" placeholder="Server invite ID" aria-label="Server invite ID" required /><button type="submit">Join</button></form>
+          <div class="room-label">TEXT CHANNELS</div>
+          <form class="chat-create-form" id="chat-channel-form" hidden><input id="chat-channel-input" type="text" maxlength="32" placeholder="Channel name" aria-label="Channel name" required /><button type="submit">Create</button></form>
+          <div class="chat-channel-list" id="chat-channels"></div>
+          <div class="room-label social-room-label"><span>FRIENDS</span><button class="chat-icon-button" id="add-friend-toggle" type="button" title="Add friend" aria-label="Add friend">+</button></div>
+          <form class="chat-create-form" id="friend-request-form" hidden><input id="friend-username-input" type="text" maxlength="32" placeholder="Wembux username" aria-label="Friend username" required /><button type="submit">Add</button></form>
+          <div class="friend-list" id="friend-list"></div>
+          <div class="room-label requests-label">FRIEND REQUESTS <span id="friend-request-count"></span></div>
+          <div class="friend-request-list" id="friend-requests"></div>
+          <div class="local-profile"><div class="chat-avatar" id="chat-profile-avatar">U</div><div><strong id="chat-profile-name">User</strong><span id="chat-profile-handle">@user</span><span id="chat-profile-status">Ready to chat</span></div></div>
+        </aside>
+        <section class="chat-main" aria-label="Chat room">
+          <header class="chat-room-header"><div><strong id="chat-channel-title"># general</strong><span>Free text channel</span></div><div class="chat-actions"><button class="chat-icon-button" id="copy-server-invite" type="button" title="Copy server invite ID" aria-label="Copy server invite ID">↗</button><span class="local-indicator" id="connection-state">CONNECTING</span></div></header>
+          <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+          <form class="chat-composer" id="chat-form"><input id="chat-message-input" maxlength="2000" autocomplete="off" placeholder="Message #general" aria-label="Write a message" required /><button type="submit" aria-label="Send message">Send</button></form>
+        </section>
+      </div>
+      <p class="free-chat-note">No Nitro, paid plans, or purchases. All features in this prototype are free.</p>
+    </section>
+    <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title"><form id="profile-form"><div class="profile-dialog-head"><div><div class="eyebrow">YOUR SPACE</div><h2 id="profile-dialog-title">Edit profile</h2></div><button class="profile-close" id="close-profile" type="button" aria-label="Close profile editor">×</button></div><div class="profile-preview"><div class="profile-banner-preview" id="profile-banner-preview"><button class="profile-avatar-preview" id="profile-avatar-preview" type="button" title="Upload avatar" aria-label="Upload avatar">W</button></div><div class="profile-preview-copy"><strong id="profile-preview-name">Wembux User</strong><span id="profile-preview-status">Ready to chat</span></div></div><label class="profile-file-control">Banner image<input id="profile-banner-file" type="file" accept="image/*" /></label><div class="banner-themes" role="group" aria-label="Banner color"><button type="button" class="banner-swatch" data-banner-theme="aurora" aria-label="Green aurora banner" title="Green aurora"><span style="background:linear-gradient(120deg,#b0e96d,#347e77)"></span></button><button type="button" class="banner-swatch" data-banner-theme="ocean" aria-label="Ocean banner" title="Ocean"><span style="background:linear-gradient(120deg,#67c9d0,#4166a0)"></span></button><button type="button" class="banner-swatch" data-banner-theme="sunset" aria-label="Sunset banner" title="Sunset"><span style="background:linear-gradient(120deg,#eea56e,#a54861)"></span></button><button type="button" class="banner-swatch" data-banner-theme="forest" aria-label="Forest banner" title="Forest"><span style="background:linear-gradient(120deg,#9dc57c,#435d42)"></span></button><button type="button" class="banner-swatch" data-banner-theme="night" aria-label="Night banner" title="Night"><span style="background:linear-gradient(120deg,#6f819e,#313b55)"></span></button></div><input id="profile-avatar-file" type="file" accept="image/*" hidden /><label class="profile-field">Display name<input id="profile-display-name" type="text" maxlength="32" required /></label><label class="profile-field">Status<input id="profile-status" type="text" maxlength="48" placeholder="What are you up to?" /></label><label class="profile-field">About me<textarea id="profile-about" maxlength="240" rows="3" placeholder="A little about you..."></textarea></label><div class="profile-dialog-actions"><button class="profile-cancel" id="cancel-profile" type="button">Cancel</button><button class="profile-save" type="submit">Save profile</button></div></form></dialog>
+  </main>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="./wembux-users.js"></script>
+<script>
+  (async function () {
+  const currentUser = await window.WembuxAccounts.ready;
+  if (!currentUser) {
+    window.location.href = './login.html';
+    return;
+  }
+  document.querySelectorAll('#page-bios-activate').forEach((page, index) => {
+    if (index > 0) page.remove();
+  });
+  const navButtons = document.querySelectorAll('[data-page]');
+  const pages = document.querySelectorAll('.page');
+  const storagePage = document.getElementById('page-storage');
+  if (storagePage) {
+    const storageNotice = storagePage.querySelector('.notice');
+    storageNotice.innerHTML = '<span class="notice-mark">!</span><span><strong>Sample disk data only.</strong> USB actions run locally through Wembux PowerShell.</span>';
+    const usbPanel = document.createElement('section');
+    usbPanel.className = 'panel section-panel';
+    usbPanel.innerHTML = `
+      <div class="panel-head"><div class="panel-title">USB maintenance</div><span class="panel-meta">LOCAL ACTIONS</span></div>
+      <p class="check-note">Choose an action, then select a detected USB drive. Junk cleanup targets common temporary files and operating-system metadata only.</p>
+      <div class="action-list">
+        <div class="action-row"><div class="action-copy"><strong>Scan for malware</strong><span>Run a Microsoft Defender custom scan</span></div><button class="action-btn" data-usb-action="scan">SCAN</button></div>
+        <div class="action-row"><div class="action-copy"><strong>Remove junk files</strong><span>Review matching files before they are removed</span></div><button class="action-btn" data-usb-action="junk">CLEAN JUNK</button></div>
+        <div class="action-row"><div class="action-copy"><strong>Erase entire USB</strong><span>Deletes all partitions and files, then formats as exFAT</span></div><button class="action-btn" data-usb-action="erase" style="border-color:#744848;color:var(--red)">ERASE ALL</button></div>
+      </div>`;
+    storagePage.append(usbPanel);
+  }
+  const launchScreen = document.getElementById('launch-screen');
+  setTimeout(() => {
+    if (launchScreen) launchScreen.classList.add('hidden');
+  }, 1200);
+  const crumb = document.getElementById('crumb');
+  const userBadge = document.getElementById('user-badge');
+  const adminLink = document.getElementById('admin-link');
+  const logoutLink = document.getElementById('logout-link');
+  const accountMenu = document.getElementById('account-menu');
+  const accountTrigger = document.getElementById('account-trigger');
+  const accountPopover = document.getElementById('account-popover');
+  const profileDialog = document.getElementById('profile-dialog');
+  const profileForm = document.getElementById('profile-form');
+  profileDialog.querySelector('#profile-status').id = 'profile-custom-status';
+  const profileStorageKey = `wembux_profile_v1_${currentUser ? currentUser.id : 'local'}`;
+  const profileDefaults = {displayName: currentUser ? currentUser.username : 'Guest', status: 'Ready to chat', about: '', bannerTheme: 'aurora', bannerImage: '', avatarImage: ''};
+  const bannerThemes = {
+    aurora: 'linear-gradient(120deg,#b0e96d,#347e77)',
+    ocean: 'linear-gradient(120deg,#67c9d0,#4166a0)',
+    sunset: 'linear-gradient(120deg,#eea56e,#a54861)',
+    forest: 'linear-gradient(120deg,#9dc57c,#435d42)',
+    night: 'linear-gradient(120deg,#6f819e,#313b55)'
+  };
+  function readProfileState() {
+    try {
+      return {...profileDefaults, ...JSON.parse(localStorage.getItem(profileStorageKey) || '{}')};
+    } catch {
+      return {...profileDefaults};
+    }
+  }
+  let profileState = readProfileState();
+  function setAvatar(element, image, name) {
+    if (!element) return;
+    element.style.backgroundImage = image ? `url("${image}")` : '';
+    element.textContent = image ? '' : String(name || 'U').slice(0, 2).toUpperCase();
+  }
+  function renderProfileArtwork(name = profileState.displayName || profileDefaults.displayName) {
+    setAvatar(userBadge, profileState.avatarImage, name);
+    setAvatar(document.getElementById('account-menu-avatar'), profileState.avatarImage, name);
+    setAvatar(document.getElementById('profile-avatar-preview'), profileState.avatarImage, name);
+    const banner = profileState.bannerImage ? `url("${profileState.bannerImage}")` : bannerThemes[profileState.bannerTheme] || bannerThemes.aurora;
+    document.getElementById('account-menu-banner').style.backgroundImage = banner;
+    document.getElementById('profile-banner-preview').style.backgroundImage = banner;
+    document.querySelectorAll('[data-banner-theme]').forEach(button => button.setAttribute('aria-pressed', String(!profileState.bannerImage && button.dataset.bannerTheme === profileState.bannerTheme)));
+  }
+  function renderProfile() {
+    const name = profileState.displayName || profileDefaults.displayName;
+    const status = profileState.status || 'Ready to chat';
+    document.getElementById('account-name').textContent = name;
+    document.getElementById('account-menu-name').textContent = name;
+    document.getElementById('account-menu-status').textContent = status;
+    const aboutNode = document.getElementById('account-menu-about') || (() => {
+      const node = document.createElement('small');
+      node.id = 'account-menu-about';
+      node.className = 'account-about';
+      document.querySelector('.account-popover-user > span:last-child').append(node);
+      return node;
+    })();
+    aboutNode.textContent = profileState.about || '';
+    aboutNode.hidden = !profileState.about;
+    document.getElementById('profile-preview-name').textContent = name;
+    document.getElementById('profile-preview-status').textContent = status;
+    document.getElementById('profile-display-name').value = name;
+    document.getElementById('profile-custom-status').value = profileState.status || '';
+    document.getElementById('profile-about').value = profileState.about || '';
+    renderProfileArtwork(name);
+  }
+  async function compressProfileImage(file, width, height) {
+    if (!file || !file.type.startsWith('image/')) throw new Error('Choose an image file.');
+    if (file.size > 8 * 1024 * 1024) throw new Error('Choose an image smaller than 8 MB.');
+    const bitmap = await createImageBitmap(file);
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    const scale = Math.max(width / bitmap.width, height / bitmap.height);
+    const cropWidth = width / scale;
+    const cropHeight = height / scale;
+    context.drawImage(bitmap, (bitmap.width - cropWidth) / 2, (bitmap.height - cropHeight) / 2, cropWidth, cropHeight, 0, 0, width, height);
+    bitmap.close();
+    return canvas.toDataURL('image/jpeg', 0.78);
+  }
+  renderProfile();
+  if (currentUser) {
+    if (currentUser.role === 'owner' || currentUser.role === 'admin') {
+      adminLink.hidden = false;
+    }
+    logoutLink.addEventListener('click', async () => {
+      await window.WembuxAccounts.clearSession();
+      window.location.href = './login.html';
+    });
+  }
+  accountTrigger.addEventListener('click', () => {
+    const opening = accountPopover.hidden;
+    accountPopover.hidden = !opening;
+    accountTrigger.setAttribute('aria-expanded', String(opening));
+  });
+  document.addEventListener('click', event => {
+    if (!accountMenu.contains(event.target)) {
+      accountPopover.hidden = true;
+      accountTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.getElementById('open-profile-editor').addEventListener('click', () => {
+    profileState = readProfileState();
+    renderProfile();
+    accountPopover.hidden = true;
+    accountTrigger.setAttribute('aria-expanded', 'false');
+    profileDialog.showModal();
+  });
+  document.getElementById('close-profile').addEventListener('click', () => profileDialog.close());
+  document.getElementById('cancel-profile').addEventListener('click', () => {
+    profileState = readProfileState();
+    renderProfile();
+    profileDialog.close();
+  });
+  document.getElementById('profile-avatar-preview').addEventListener('click', () => document.getElementById('profile-avatar-file').click());
+  document.querySelectorAll('[data-banner-theme]').forEach(button => button.addEventListener('click', () => {
+    profileState.bannerTheme = button.dataset.bannerTheme;
+    profileState.bannerImage = '';
+    renderProfileArtwork();
+  }));
+  document.getElementById('profile-banner-file').addEventListener('change', async event => {
+    try {
+      profileState.bannerImage = await compressProfileImage(event.target.files[0], 1200, 320);
+      renderProfileArtwork();
+    } catch (error) {
+      notify(error.message || 'Could not load that banner image.');
+    }
+    event.target.value = '';
+  });
+  document.getElementById('profile-avatar-file').addEventListener('change', async event => {
+    try {
+      profileState.avatarImage = await compressProfileImage(event.target.files[0], 256, 256);
+      renderProfileArtwork();
+    } catch (error) {
+      notify(error.message || 'Could not load that avatar image.');
+    }
+    event.target.value = '';
+  });
+  profileForm.addEventListener('submit', event => {
+    event.preventDefault();
+    profileState.displayName = document.getElementById('profile-display-name').value.trim().slice(0, 32) || profileDefaults.displayName;
+    profileState.status = document.getElementById('profile-custom-status').value.trim().slice(0, 48);
+    profileState.about = document.getElementById('profile-about').value.trim().slice(0, 240);
+    try {
+      localStorage.setItem(profileStorageKey, JSON.stringify(profileState));
+      renderProfile();
+      profileDialog.close();
+      renderChatWorkspace();
+      notify('Profile saved on this device.');
+    } catch {
+      notify('Could not save this profile image. Try a smaller image.');
+    }
+  });
+  function showPage(name) {
+    pages.forEach(page => page.classList.toggle('active', page.id === `page-${name}`));
+    navButtons.forEach(button => button.classList.toggle('active', button.dataset.page === name));
+    crumb.textContent = name.replace('-', ' ').toUpperCase();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  const chatServers = document.getElementById('chat-servers');
+  const chatChannels = document.getElementById('chat-channels');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatForm = document.getElementById('chat-form');
+  const chatMessageInput = document.getElementById('chat-message-input');
+  const chatServerForm = document.getElementById('chat-server-form');
+  const chatServerInput = document.getElementById('chat-server-input');
+  const chatChannelForm = document.getElementById('chat-channel-form');
+  const chatChannelInput = document.getElementById('chat-channel-input');
+  const chatServerJoinForm = document.getElementById('chat-server-join-form');
+  const chatServerIdInput = document.getElementById('chat-server-id-input');
+  let chatState = {servers: [], activeServerId: null, activeChannelId: null, channels: []};
+  let socialState = {friends: [], incoming: [], outgoing: []};
+  let activeDirectFriendId = null;
+  let activeMessages = [];
+  const getApi = (path, options) => window.WembuxAccounts.apiRequest(path, options);
+  async function loadSocialState() {
+    socialState = await getApi('/friends');
+  }
+  async function selectServer(serverId, channelId = null) {
+    const server = chatState.servers.find(item => item.id === serverId);
+    if (!server) return;
+    activeDirectFriendId = null;
+    chatState.activeServerId = server.id;
+    const result = await getApi(`/servers/${encodeURIComponent(server.id)}/channels`);
+    chatState.channels = result.channels;
+    const channel = chatState.channels.find(item => item.id === channelId) || chatState.channels[0];
+    chatState.activeChannelId = channel ? channel.id : null;
+    activeMessages = channel ? (await getApi(`/channels/${encodeURIComponent(channel.id)}/messages`)).messages : [];
+    renderChatWorkspace();
+  }
+  async function loadServers(preferredServerId = chatState.activeServerId) {
+    const result = await getApi('/servers');
+    chatState.servers = result.servers;
+    const server = chatState.servers.find(item => item.id === preferredServerId) || chatState.servers[0];
+    if (server) await selectServer(server.id, chatState.activeChannelId);
+    else {
+      chatState.activeServerId = null;
+      chatState.activeChannelId = null;
+      chatState.channels = [];
+      activeMessages = [];
+    }
+  }
+  async function loadDirectMessages(friendId) {
+    const result = await getApi(`/dms/${encodeURIComponent(friendId)}/messages`);
+    activeMessages = result.messages;
+    renderChatWorkspace();
+  }
+  function renderChatMessages(channel) {
+    renderMessageList(activeMessages, channel ? `Welcome to #${channel.name}. Start the conversation.` : 'Create a server or add a friend to start chatting.');
+  }
+  function renderMessageList(messages, emptyMessage) {
+    chatMessages.replaceChildren();
+    if (!messages.length) {
+      const empty = document.createElement('p');
+      empty.className = 'chat-empty';
+      empty.textContent = emptyMessage;
+      chatMessages.append(empty);
+      return;
+    }
+    messages.forEach(item => {
+      const row = document.createElement('article');
+      row.className = 'chat-message';
+      const avatar = document.createElement('div');
+      avatar.className = 'chat-avatar';
+      avatar.textContent = String(item.username || '?').slice(0, 2).toUpperCase();
+      const body = document.createElement('div');
+      body.className = 'chat-message-body';
+      const meta = document.createElement('div');
+      meta.className = 'chat-message-meta';
+      const author = document.createElement('strong');
+      author.textContent = item.username || 'User';
+      const timestamp = document.createElement('time');
+      const date = new Date(item.createdAt);
+      timestamp.textContent = Number.isNaN(date.getTime()) ? '' : date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+      const content = document.createElement('p');
+      content.className = 'chat-message-text';
+      content.textContent = item.text || '';
+      meta.append(author, timestamp);
+      body.append(meta, content);
+      row.append(avatar, body);
+      chatMessages.append(row);
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  function renderDirectMessages(friend) {
+    renderMessageList(activeMessages, `You and @${friend.username} are friends. Say hello!`);
+  }
+  function renderSocialPanel() {
+    const friendList = document.getElementById('friend-list');
+    const requestList = document.getElementById('friend-requests');
+    friendList.replaceChildren();
+    socialState.friends.forEach(friend => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `friend-entry${activeDirectFriendId === friend.id ? ' active' : ''}`;
+      const avatar = document.createElement('span');
+      avatar.className = 'chat-avatar';
+      avatar.textContent = friend.username.slice(0, 2).toUpperCase();
+      const copy = document.createElement('span');
+      copy.className = 'friend-entry-copy';
+      const name = document.createElement('strong');
+      name.textContent = friend.username;
+      const handle = document.createElement('small');
+      handle.textContent = `@${friend.username}`;
+      copy.append(name, handle);
+      button.append(avatar, copy);
+      button.addEventListener('click', () => openDirectMessages(friend));
+      friendList.append(button);
+    });
+    if (!friendList.childElementCount) {
+      const empty = document.createElement('div');
+      empty.className = 'friend-list-empty';
+      empty.textContent = 'No friends yet';
+      friendList.append(empty);
+    }
+    requestList.replaceChildren();
+    document.getElementById('friend-request-count').textContent = socialState.incoming.length ? String(socialState.incoming.length) : '';
+    socialState.incoming.forEach(request => {
+      const card = document.createElement('div');
+      card.className = 'friend-request-card';
+      const name = document.createElement('strong');
+      name.textContent = request.user.username;
+      const handle = document.createElement('small');
+      handle.textContent = `@${request.user.username} wants to connect`;
+      const actions = document.createElement('div');
+      actions.className = 'friend-request-actions';
+      const accept = document.createElement('button');
+      accept.type = 'button';
+      accept.className = 'accept-request';
+      accept.textContent = 'Accept';
+      accept.addEventListener('click', () => resolveFriendRequest(request, true));
+      const decline = document.createElement('button');
+      decline.type = 'button';
+      decline.className = 'decline-request';
+      decline.textContent = 'Decline';
+      decline.addEventListener('click', () => resolveFriendRequest(request, false));
+      actions.append(accept, decline);
+      card.append(name, handle, actions);
+      requestList.append(card);
+    });
+    socialState.outgoing.forEach(request => {
+      const pending = document.createElement('div');
+      pending.className = 'friend-pending';
+      pending.textContent = `Sent to @${request.user.username} · waiting for approval`;
+      requestList.append(pending);
+    });
+    if (!requestList.childElementCount) {
+      const empty = document.createElement('div');
+      empty.className = 'friend-requests-empty';
+      empty.textContent = 'No pending requests';
+      requestList.append(empty);
+    }
+  }
+  function renderChatWorkspace() {
+    if (!chatServers || !chatChannels || !chatMessages) return;
+    const server = chatState.servers.find(item => item.id === chatState.activeServerId) || null;
+    const channel = chatState.channels.find(item => item.id === chatState.activeChannelId) || null;
+    const friend = socialState.friends.find(item => item.id === activeDirectFriendId) || null;
+    chatServers.replaceChildren();
+    chatState.servers.forEach(item => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `guild-button${!friend && item.id === chatState.activeServerId ? ' active' : ''}`;
+      button.textContent = item.name.slice(0, 2).toUpperCase();
+      button.title = `${item.name} · invite ${item.id}`;
+      button.setAttribute('aria-label', item.name);
+      button.addEventListener('click', () => selectServer(item.id));
+      chatServers.append(button);
+    });
+    const addServer = document.createElement('button');
+    addServer.type = 'button';
+    addServer.className = 'guild-button create';
+    addServer.textContent = '+';
+    addServer.title = 'Create server';
+    addServer.setAttribute('aria-label', 'Create server');
+    addServer.addEventListener('click', () => {
+      chatServerForm.hidden = false;
+      chatServerJoinForm.hidden = true;
+      chatChannelForm.hidden = true;
+      chatServerInput.focus();
+    });
+    chatServers.append(addServer);
+    const joinServer = document.createElement('button');
+    joinServer.type = 'button';
+    joinServer.className = 'guild-button create';
+    joinServer.textContent = '↗';
+    joinServer.title = 'Join server by invite ID';
+    joinServer.setAttribute('aria-label', 'Join server');
+    joinServer.addEventListener('click', () => {
+      chatServerJoinForm.hidden = !chatServerJoinForm.hidden;
+      chatServerForm.hidden = true;
+      if (!chatServerJoinForm.hidden) chatServerIdInput.focus();
+    });
+    chatServers.append(joinServer);
+    chatChannels.replaceChildren();
+    chatState.channels.forEach(item => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `chat-channel-button${!friend && item.id === chatState.activeChannelId ? ' active' : ''}`;
+      button.textContent = item.name;
+      button.addEventListener('click', () => selectServer(chatState.activeServerId, item.id));
+      chatChannels.append(button);
+    });
+    document.getElementById('chat-server-name').textContent = friend ? 'Direct messages' : server ? server.name : 'Your servers';
+    document.getElementById('create-chat-channel').hidden = Boolean(friend || !server || server.ownerUsername !== currentUser.username);
+    chatChannelForm.hidden = Boolean(friend || !server || server.ownerUsername !== currentUser.username);
+    document.getElementById('chat-channel-title').textContent = friend ? `@ ${friend.username}` : channel ? `# ${channel.name}` : 'Choose a channel';
+    document.querySelector('.chat-room-header div span').textContent = friend ? `Direct message with @${friend.username}` : server ? `${server.members || 1} server member${server.members === 1 ? '' : 's'}` : 'Create or join a server';
+    chatMessageInput.placeholder = friend ? `Message @${friend.username}` : channel ? `Message #${channel.name}` : 'Create or join a server first';
+    chatMessageInput.disabled = !friend && !channel;
+    chatForm.querySelector('button[type="submit"]').disabled = !friend && !channel;
+    document.getElementById('copy-server-invite').hidden = !server || Boolean(friend);
+    document.getElementById('copy-server-invite').hidden = !server || Boolean(friend);
+    const displayName = profileState.displayName || currentUser.username;
+    document.getElementById('chat-profile-name').textContent = displayName;
+    document.getElementById('chat-profile-avatar').textContent = displayName.slice(0, 2).toUpperCase();
+    document.getElementById('chat-profile-status').textContent = profileState.status || 'Ready to chat';
+    document.getElementById('chat-profile-handle').textContent = `@${currentUser.username}`;
+    renderSocialPanel();
+    if (friend) renderDirectMessages(friend);
+    else renderChatMessages(channel);
+  }
+  async function openDirectMessages(friend) {
+    activeDirectFriendId = friend.id;
+    await loadDirectMessages(friend.id);
+  }
+  async function resolveFriendRequest(request, accept) {
+    try {
+      await getApi(`/friends/requests/${encodeURIComponent(request.id)}/${accept ? 'accept' : 'decline'}`, {method: 'POST'});
+      await loadSocialState();
+      renderChatWorkspace();
+      if (accept) {
+        notify(`You and @${request.user.username} are now friends.`);
+        await openDirectMessages(request.user);
+      } else {
+        notify('Friend request declined.');
+      }
+    } catch (error) {
+      notify(error.message || 'Could not update the friend request.');
+    }
+  }
+  document.getElementById('add-friend-toggle').addEventListener('click', () => {
+    const form = document.getElementById('friend-request-form');
+    form.hidden = !form.hidden;
+    if (!form.hidden) document.getElementById('friend-username-input').focus();
+  });
+  document.getElementById('friend-request-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    const username = document.getElementById('friend-username-input').value.trim().replace(/^@+/, '');
+    try {
+      await getApi('/friends/requests', {method: 'POST', body: JSON.stringify({username})});
+      await loadSocialState();
+      document.getElementById('friend-username-input').value = '';
+      document.getElementById('friend-request-form').hidden = true;
+      renderChatWorkspace();
+      notify(`Friend request sent to @${username}.`);
+    } catch (error) {
+      notify(error.message || 'Could not send friend request.');
+    }
+  });
+  chatServerForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const name = chatServerInput.value.trim().slice(0, 48);
+    if (!name) return notify('Enter a server name first.');
+    try {
+      const result = await getApi('/servers', {method: 'POST', body: JSON.stringify({name})});
+      chatServerInput.value = '';
+      chatServerForm.hidden = true;
+      await loadServers(result.server.id);
+      notify(`Server created. Share invite ID: ${result.server.id}`);
+    } catch (error) {
+      notify(error.message || 'Could not create the server.');
+    }
+  });
+  chatServerJoinForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const serverId = chatServerIdInput.value.trim();
+    try {
+      await getApi(`/servers/${encodeURIComponent(serverId)}/join`, {method: 'POST'});
+      chatServerIdInput.value = '';
+      chatServerJoinForm.hidden = true;
+      await loadServers(serverId);
+      notify('Joined server.');
+    } catch (error) {
+      notify(error.message || 'Could not join that server.');
+    }
+  });
+  document.getElementById('copy-server-invite').addEventListener('click', async () => {
+    if (!chatState.activeServerId) return;
+    try {
+      await navigator.clipboard.writeText(chatState.activeServerId);
+      notify('Server invite ID copied. Share it with a friend.');
+    } catch {
+      window.prompt('Copy this server invite ID:', chatState.activeServerId);
+    }
+  });
+  document.getElementById('create-chat-channel')?.addEventListener('click', () => {
+    if (!chatState.activeServerId) return notify('Create or join a server first.');
+    chatChannelForm.hidden = false;
+    chatServerForm.hidden = true;
+    chatServerJoinForm.hidden = true;
+    chatChannelInput.focus();
+  });
+  chatChannelForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const cleanName = chatChannelInput.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '').slice(0, 32);
+    if (!cleanName) return notify('Enter a valid channel name.');
+    try {
+      await getApi(`/servers/${encodeURIComponent(chatState.activeServerId)}/channels`, {method: 'POST', body: JSON.stringify({name: cleanName})});
+      chatChannelInput.value = '';
+      chatChannelForm.hidden = true;
+      await selectServer(chatState.activeServerId);
+      notify(`Channel #${cleanName} created.`);
+    } catch (error) {
+      notify(error.message || 'Could not create channel.');
+    }
+  });
+  chatForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const text = chatMessageInput.value.trim();
+    if (!text) return;
+    try {
+      const path = activeDirectFriendId
+        ? `/dms/${encodeURIComponent(activeDirectFriendId)}/messages`
+        : `/channels/${encodeURIComponent(chatState.activeChannelId)}/messages`;
+      const result = await getApi(path, {method: 'POST', body: JSON.stringify({text})});
+      activeMessages.push(result.message);
+      renderMessageList(activeMessages, '');
+    } catch (error) {
+      notify(error.message || 'Could not send message.');
+      return;
+    }
+    chatMessageInput.value = '';
+    chatMessageInput.focus();
+  });
+  let chatSocket;
+  let reconnectTimer;
+  function connectChatSocket() {
+    const socketUrl = new URL('/api/ws', window.location.href);
+    socketUrl.protocol = socketUrl.protocol === 'https:' ? 'wss:' : 'ws:';
+    chatSocket = new WebSocket(socketUrl);
+    chatSocket.addEventListener('open', () => {
+      document.getElementById('connection-state').textContent = 'ONLINE';
+    });
+    chatSocket.addEventListener('message', async event => {
+      let update;
+      try { update = JSON.parse(event.data); } catch { return; }
+      try {
+        if (['friend_request', 'friend_request_resolved'].includes(update.type)) {
+          await loadSocialState();
+          renderChatWorkspace();
+        } else if (update.type === 'dm_message' && activeDirectFriendId === update.friendId) {
+          await loadDirectMessages(activeDirectFriendId);
+        } else if (update.type === 'channel_message' && chatState.activeChannelId === update.channelId) {
+          activeMessages = (await getApi(`/channels/${encodeURIComponent(update.channelId)}/messages`)).messages;
+          renderMessageList(activeMessages, '');
+        } else if (update.type === 'server_members_changed') {
+          await loadServers(chatState.activeServerId);
+        }
+      } catch {}
+    });
+    chatSocket.addEventListener('close', () => {
+      document.getElementById('connection-state').textContent = 'RECONNECTING';
+      clearTimeout(reconnectTimer);
+      reconnectTimer = setTimeout(connectChatSocket, 2500);
+    });
+    chatSocket.addEventListener('error', () => chatSocket.close());
+  }
+  async function initializeOnlineChat() {
+    try {
+      await Promise.all([loadSocialState(), loadServers()]);
+      renderChatWorkspace();
+      connectChatSocket();
+    } catch (error) {
+      document.getElementById('connection-state').textContent = 'OFFLINE';
+      notify(error.message || 'Could not connect to the Wembux server.');
+    }
+  }
+  await initializeOnlineChat();
+  navButtons.forEach(button => button.addEventListener('click', () => showPage(button.dataset.page)));
+  document.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', event => {
+    event.preventDefault();
+    showPage(button.dataset.go);
+  }));
+  document.querySelectorAll('[data-usb-action]').forEach(button => button.addEventListener('click', () => {
+    const action = button.dataset.usbAction;
+    const confirmations = {
+      scan: 'Open Microsoft Defender and choose a USB drive to scan for malware?',
+      junk: 'Choose a USB drive to review and remove common junk files?',
+      erase: 'Erase every partition and file on a selected USB drive? You will have to confirm the exact drive again.'
+    };
+    if (!window.confirm(confirmations[action])) return;
+    window.location.href = `wembux://usb/${action}`;
+  }));
+  function applySelectedPowerProfile() {
+    const selected = document.querySelector('[data-profile].selected');
+    if (!selected) return;
+    const profile = selected.dataset.profile.toLowerCase();
+    window.location.href = `wembux://power/${profile}`;
+  }
+  document.querySelectorAll('[data-profile]').forEach(button => button.addEventListener('click', () => {
+    const profile = button.dataset.profile;
+    document.querySelectorAll('[data-profile]').forEach(option => option.classList.toggle('selected', option.dataset.profile === profile));
+    document.querySelectorAll('#profile-status').forEach(status => status.textContent = `${profile} selected`);
+    applySelectedPowerProfile();
+  }));
+  document.querySelectorAll('[data-apply-power]').forEach(button => button.addEventListener('click', applySelectedPowerProfile));
+  const biosTopic = document.getElementById('bios-action-topic');
+  const biosTopicHelp = document.getElementById('bios-action-guidance');
+  const biosTopicLocation = document.getElementById('bios-action-location');
+  const biosTopics = {
+    memory: {
+      help: 'A-XMP can run supported memory at its rated profile. Confirm memory and CPU support, and test stability after the change.',
+      location: 'MSI Click BIOS: OC > A-XMP. Use only a profile printed on your memory kit; do not guess.'
+    },
+    boot: {
+      help: 'Changes which device starts first. Keep Windows Boot Manager for your system drive available.',
+      location: 'MSI Click BIOS: Settings > Boot. Changing this does not make games or apps faster.'
+    },
+    virtualization: {
+      help: 'SVM enables virtual machines and some developer tools. It usually does not improve game performance.',
+      location: 'MSI Click BIOS: OC or Settings > Advanced > CPU Configuration > SVM Mode. Menu names may vary.'
+    },
+    security: {
+      help: 'Secure Boot and TPM support Windows security features. Do not disable them casually; have your BitLocker recovery key ready.',
+      location: 'MSI Click BIOS: Settings > Security or Trusted Computing. Keep security features enabled unless you have a specific need.'
+    },
+    fans: {
+      help: 'Fan curves trade noise for temperature. Change gradually and monitor CPU temperatures after saving.',
+      location: 'MSI Click BIOS: Hardware Monitor. Do not set fans to stop under load.'
+    }
+  };
+  if (biosTopic) {
+    biosTopic.addEventListener('change', () => {
+      const topic = biosTopics[biosTopic.value];
+      biosTopicHelp.textContent = topic.help;
+      biosTopicLocation.textContent = topic.location;
+    });
+    document.getElementById('activate-bios-option').addEventListener('click', () => {
+      if (!window.confirm('Save your work first. Continue to the Windows restart confirmation for MSI UEFI?')) return;
+      window.location.href = `wembux://bios/${biosTopic.value}`;
+    });
+    document.getElementById('cancel-bios-activation').addEventListener('click', () => {
+      window.location.href = 'wembux://bios/cancel';
+    });
+  }
+  document.querySelectorAll('.switch').forEach(button => button.addEventListener('click', () => {
+    const on = button.getAttribute('aria-pressed') !== 'true';
+    button.setAttribute('aria-pressed', String(on));
+    button.classList.toggle('on', on);
+    notify('Preview only. Windows startup settings were not changed.');
+  }));
+  const gpuVendor = document.getElementById('gpu-vendor');
+  const gpuLink = document.getElementById('gpu-link');
+  const gpuGuidance = document.getElementById('gpu-guidance');
+  const gpuTools = {
+    nvidia: {
+      url: 'https://www.nvidia.com/Download/index.aspx',
+      label: 'OPEN NVIDIA ↗',
+      guidance: "Use NVIDIA's official driver finder and select your exact GPU and Windows version."
+    },
+    amd: {
+      url: 'https://www.amd.com/en/support/download/drivers.html',
+      label: 'OPEN AMD ↗',
+      guidance: "Use AMD's official product selector for Radeon graphics or AMD chipset drivers."
+    },
+    intel: {
+      url: 'https://www.intel.com/content/www/us/en/download-center/home.html',
+      label: 'OPEN INTEL ↗',
+      guidance: "Use Intel's download center; laptop owners should check their PC maker for customized drivers."
+    },
+    unknown: {
+      url: 'ms-settings:windowsupdate-optionalupdates',
+      label: 'CHECK WINDOWS ↗',
+      guidance: 'Check Windows Optional updates or identify the GPU in Device Manager before selecting a vendor.'
+    }
+  };
+  function updateGpuTool() {
+    if (!gpuVendor || !gpuLink || !gpuGuidance) return;
+    const tool = gpuTools[gpuVendor.value];
+    gpuLink.href = tool.url;
+    gpuLink.textContent = tool.label;
+    gpuGuidance.textContent = tool.guidance;
+    try { localStorage.setItem('pulsedeck-gpu-vendor', gpuVendor.value); } catch {}
+  }
+  if (gpuVendor) {
+    try { gpuVendor.value = localStorage.getItem('pulsedeck-gpu-vendor') || 'nvidia'; } catch {}
+    gpuVendor.addEventListener('change', updateGpuTool);
+    updateGpuTool();
+  }
+  function updateChecklist(group) {
+    const checks = [...document.querySelectorAll(`[data-check^="${group}-"]`)];
+    let completed = 0;
+    checks.forEach(check => {
+      let checked = false;
+      try { checked = localStorage.getItem(`pulsedeck-${check.dataset.check}`) === 'true'; } catch {}
+      check.checked = checked;
+      if (checked) completed++;
+      check.addEventListener('change', () => {
+        try { localStorage.setItem(`pulsedeck-${check.dataset.check}`, String(check.checked)); } catch {}
+        updateChecklist(group);
+      }, {once: true});
+    });
+    const progress = document.getElementById(`${group}-progress`);
+    const label = document.getElementById(`${group}-progress-label`);
+    if (progress) progress.style.width = `${checks.length ? completed / checks.length * 100 : 0}%`;
+    if (label) label.textContent = `${completed} of ${checks.length} steps complete`;
+  }
+  updateChecklist('driver');
+  updateChecklist('bios');
+  let toastTimer;
+  function notify(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+  document.querySelectorAll('[data-toast]').forEach(button => button.addEventListener('click', () => notify(button.dataset.toast)));
+  async function checkHostedBuild() {
+    if (location.protocol !== 'https:' && location.protocol !== 'http:') return;
+    const screen = document.getElementById('update-screen');
+    const status = document.getElementById('update-status');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    let redirecting = false;
+    screen.hidden = false;
+    try {
+      const buildUrl = new URL('build-info.json', document.baseURI);
+      buildUrl.searchParams.set('check', String(Date.now()));
+      const response = await fetch(buildUrl, {cache: 'no-store', signal: controller.signal});
+      if (response.ok) {
+        const latest = await response.json();
+        const current = document.querySelector('meta[name="wembux-build"]').content;
+        if (latest.version && latest.version !== current) {
+          status.textContent = 'Downloading updates...';
+          const latestUrl = new URL(location.href);
+          latestUrl.searchParams.set('build', latest.version);
+          redirecting = true;
+          location.replace(latestUrl.href);
+        }
+      }
+    } catch {}
+    finally {
+      clearTimeout(timeout);
+      if (!redirecting) screen.hidden = true;
+    }
+  }
+  checkHostedBuild();
+  })();
+</script>
+</body>
+</html>

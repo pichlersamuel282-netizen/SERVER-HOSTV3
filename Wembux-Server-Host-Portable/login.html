@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="./wembux.ico" sizes="any" type="image/x-icon" />
+  <title>Wembux Login</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101311;
+      --panel: #171b18;
+      --line: #2a312c;
+      --text: #edf2ec;
+      --muted: #8c978d;
+      --lime: #c6f36a;
+      --cyan: #78d9d0;
+      --red: #ff7a7a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at top, #1e2a22 0%, var(--bg) 35%);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+    .card {
+      width: min(92vw, 420px);
+      background: rgba(23,27,24,.95);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 28px 22px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.3);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      font-weight: 800;
+      font-size: 19px;
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--lime);
+      color: #0f120f;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      box-shadow: 0 0 30px rgba(198,243,106,.25);
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    form[hidden] { display: none; }
+    label {
+      display: grid;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    input {
+      width: 100%;
+      background: #101613;
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font: inherit;
+    }
+    button {
+      margin-top: 8px;
+      border: 1px solid rgba(198,243,106,.4);
+      background: rgba(198,243,106,.08);
+      color: var(--lime);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      font-size: 12px;
+      margin-top: 14px;
+      color: var(--muted);
+    }
+    .links a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+    .mode-switch {
+      width: 100%;
+      margin-top: 12px;
+      border-color: var(--line);
+      background: transparent;
+      color: var(--cyan);
+    }
+    .local-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .error {
+      min-height: 20px;
+      color: var(--red);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand"><div class="brand-mark">W</div><div>Wembux</div></div>
+    <div class="subtitle" id="form-subtitle">Sign in to continue</div>
+
+    <form id="login-form">
+      <label>
+        Username or email
+        <input name="login" type="text" placeholder="Your username or email" autocomplete="username" required />
+      </label>
+      <label>
+        Password
+        <input name="password" type="password" placeholder="Password" autocomplete="current-password" required />
+      </label>
+      <button type="submit">Log in</button>
+      <div class="error" id="login-error"></div>
+    </form>
+
+    <form id="signup-form" hidden>
+      <label>
+        Username
+        <input name="username" type="text" minlength="3" maxlength="32" autocomplete="username" required />
+      </label>
+      <label>
+        Email
+        <input name="email" type="email" autocomplete="email" required />
+      </label>
+      <label>
+        Password
+        <input name="password" type="password" minlength="8" autocomplete="new-password" required />
+      </label>
+      <button type="submit">Create account</button>
+      <div class="error" id="signup-error"></div>
+    </form>
+    <button class="mode-switch" id="mode-switch" type="button">Need an account? Sign up</button>
+    <div class="local-note">Accounts are stored on the Wembux server. Use the host's HTTPS link to sign in from another device.</div>
+  </div>
+
+  <script src="./wembux-users.js"></script>
+  <script>
+    (async function () {
+      const form = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      const errorEl = document.getElementById('login-error');
+      const signupErrorEl = document.getElementById('signup-error');
+      const modeSwitch = document.getElementById('mode-switch');
+      const subtitle = document.getElementById('form-subtitle');
+      let signupMode = false;
+
+      const current = await window.WembuxAccounts.ready;
+      if (current) {
+        if (current.role === 'admin') {
+          window.location.href = './account-admin.html';
+        } else {
+          window.location.href = './index.html';
+        }
+      }
+
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const login = String(formData.get('login') || '').trim();
+        const password = String(formData.get('password') || '');
+
+        try {
+          const account = await window.WembuxAccounts.loginAccount(login, password);
+          if (account.role === 'admin') {
+            window.location.href = './account-admin.html';
+          } else {
+            window.location.href = './index.html';
+          }
+        } catch (error) {
+          errorEl.textContent = error.message || 'Login failed.';
+        }
+      });
+
+      signupForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        signupErrorEl.textContent = '';
+        const formData = new FormData(signupForm);
+        try {
+          await window.WembuxAccounts.createAccount({
+            username: formData.get('username'),
+            email: formData.get('email'),
+            password: formData.get('password')
+          });
+          window.location.href = './index.html';
+        } catch (error) {
+          signupErrorEl.textContent = error.message || 'Account creation failed.';
+        }
+      });
+
+      modeSwitch.addEventListener('click', function () {
+        signupMode = !signupMode;
+        form.hidden = signupMode;
+        signupForm.hidden = !signupMode;
+        errorEl.textContent = '';
+        signupErrorEl.textContent = '';
+        subtitle.textContent = signupMode ? 'Create an account to continue' : 'Sign in to continue';
+        modeSwitch.textContent = signupMode ? 'Already have an account? Log in' : 'Need an account? Sign up';
+      });
+    })();
+  </script>
+</body>
+</html>
